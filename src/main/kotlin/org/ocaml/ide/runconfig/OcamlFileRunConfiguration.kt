@@ -11,6 +11,7 @@ import com.intellij.openapi.module.Module
 import com.intellij.openapi.module.ModuleManager
 import com.intellij.openapi.options.SettingsEditor
 import com.intellij.openapi.project.Project
+import org.jdom.Element
 import org.ocaml.ide.runconfig.form.OcamlRunConfigurationForm
 
 
@@ -20,7 +21,7 @@ import org.ocaml.ide.runconfig.form.OcamlRunConfigurationForm
 class OcamlFileRunConfiguration(name: String,
                                 project: Project,
                                 ocamlRunConfigurationType: OcamlRunConfigurationType) :
-        ModuleBasedConfiguration<RunConfigurationModule>(name,
+        ModuleBasedConfiguration<RunConfigurationModule, Element>(name,
                 RunConfigurationModule(project),
                 ocamlRunConfigurationType.configurationFactories[0]), RunConfigurationWithSuppressedDefaultRunAction {
 

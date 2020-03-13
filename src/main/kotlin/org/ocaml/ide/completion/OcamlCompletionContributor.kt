@@ -18,12 +18,12 @@ class OcamlCompletionContributor : CompletionContributor() {
         extend(CompletionType.BASIC, PlatformPatterns.psiElement(),
                 object : CompletionProvider<CompletionParameters>() {
                     override fun addCompletions(parameters: CompletionParameters,
-                                       context: ProcessingContext,
-                                       resultSet: CompletionResultSet) {
+                                                context: ProcessingContext,
+                                                resultSet: CompletionResultSet) {
                         val ln = LineNumbering(parameters.originalFile.text)
                         val completions = merlinService.completions(parameters.originalFile,
                                 findSuitablePrefix(parameters), ln.position(parameters.offset))
-                        for(completion in completions) {
+                        for (completion in completions) {
                             resultSet.addElement(LookupElementBuilder.create(completion.name).withTypeText(completion.desc))
                         }
                     }
@@ -31,17 +31,18 @@ class OcamlCompletionContributor : CompletionContributor() {
     }
 
     private fun findSuitablePrefix(parameters: CompletionParameters): String {
-        return findEmacsOcamlAtom(parameters.originalFile.text, parameters.originalPosition!!.textOffset)?:""
+        val originalPosition = parameters.originalPosition?.textOffset ?: 0
+        return findEmacsOcamlAtom(parameters.originalFile.text, originalPosition)
     }
 
-    private fun findEmacsOcamlAtom(text:String, offset: Int): String? {
+    private fun findEmacsOcamlAtom(text: String, offset: Int): String {
         val re = Regex("[a-zA-Z0-9.']*[~?]?")
         val endIndex = re.find(ReversedSubstringCharSequence(text, offset, 0))?.next()?.range?.last
 
-        if (endIndex != null) {
-            return text.substring(offset - endIndex, offset + 1)
-        }else{
-            return null
+        return if (endIndex != null) {
+            text.substring(offset - endIndex, offset + 1)
+        } else {
+            ""
         }
     }
 }

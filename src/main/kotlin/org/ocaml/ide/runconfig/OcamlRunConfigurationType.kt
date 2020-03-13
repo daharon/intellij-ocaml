@@ -1,6 +1,6 @@
 package org.ocaml.ide.runconfig
 
-import com.intellij.compiler.options.CompileStepBeforeRun
+//import com.intellij.compiler.options.CompileStepBeforeRun
 import com.intellij.execution.BeforeRunTask
 import com.intellij.execution.configurations.ConfigurationFactory
 import com.intellij.execution.configurations.ConfigurationType
@@ -23,12 +23,14 @@ class OcamlRunConfigurationType : ConfigurationTypeBase("OcamlRunFileConfigurati
             override fun createTemplateConfiguration(project: Project): RunConfiguration =
                     OcamlFileRunConfiguration("Ocaml File", project, getInstance())
 
+            /*
             override fun configureBeforeRunTaskDefaults(providerID: Key<out BeforeRunTask<BeforeRunTask<*>>>,
                                                         task: BeforeRunTask<out BeforeRunTask<*>>) {
                 if (providerID == CompileStepBeforeRun.ID) {
                     task.isEnabled = false
                 }
             }
+            */
         })
     }
 

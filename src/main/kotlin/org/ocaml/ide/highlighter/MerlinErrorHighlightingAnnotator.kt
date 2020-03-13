@@ -16,20 +16,22 @@ import org.ocaml.util.LineNumbering
 /**
  * Created by sidharthkuruvila on 26/05/16.
  */
-class MerlinErrorHighlightingAnnotator(var component: MerlinServiceComponent) : ExternalAnnotator<MerlinInfo, Results>() {
+class MerlinErrorHighlightingAnnotator : ExternalAnnotator<MerlinInfo, Results>() {
 
     companion object {
         private val LOG = Logger.getInstance(OcamlRunner::class.java)
         val merlinErrors = mapOf(
                 Pair("type", HighlightSeverity.ERROR),
+                Pair("typer", HighlightSeverity.ERROR),
                 Pair("parser", HighlightSeverity.ERROR),
                 Pair("env", HighlightSeverity.ERROR),
                 Pair("warning", HighlightSeverity.WARNING),
-                Pair("unkown", HighlightSeverity.INFORMATION))
+                Pair("unknown", HighlightSeverity.INFORMATION))
     }
 
     //TODO Add some intelligence here to help decide whether the annotator should run
     override fun collectInformation(@NotNull file: PsiFile): MerlinInfo? {
+        val component = ApplicationManager.getApplication().getComponent(MerlinServiceComponent::class.java)
         return MerlinInfo(file, file.text, component)
     }
 
@@ -47,7 +49,7 @@ class MerlinErrorHighlightingAnnotator(var component: MerlinServiceComponent) : 
             if (!merlinErrors.containsKey(error.type)) {
                 LOG.error("Unmapped error %s".format(f))
             }
-            val severity = merlinErrors[error.type]?:HighlightSeverity.ERROR
+            val severity = merlinErrors[error.type] ?: HighlightSeverity.ERROR
             val message = error.message
             holder.createAnnotation(severity, range, message)
         }
