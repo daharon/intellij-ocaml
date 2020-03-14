@@ -21,12 +21,13 @@ class MerlinErrorHighlightingAnnotator : ExternalAnnotator<MerlinInfo, Results>(
     companion object {
         private val LOG = Logger.getInstance(OcamlRunner::class.java)
         val merlinErrors = mapOf(
-                Pair("type", HighlightSeverity.ERROR),
-                Pair("typer", HighlightSeverity.ERROR),
-                Pair("parser", HighlightSeverity.ERROR),
-                Pair("env", HighlightSeverity.ERROR),
-                Pair("warning", HighlightSeverity.WARNING),
-                Pair("unknown", HighlightSeverity.INFORMATION))
+                "type" to HighlightSeverity.ERROR,
+                "typer" to HighlightSeverity.ERROR,
+                "parser" to HighlightSeverity.ERROR,
+                "env" to HighlightSeverity.ERROR,
+                "warning" to HighlightSeverity.WARNING,
+                "unknown" to HighlightSeverity.INFORMATION
+        )
     }
 
     //TODO Add some intelligence here to help decide whether the annotator should run
