@@ -9,8 +9,6 @@ import org.ocaml.lang.OcamlLanguage
 /**
  * Created by sidharthkuruvila on 07/05/16.
  */
-class OcamlPsiFileRoot(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, OcamlLanguage.INSTANCE) {
-    override fun getFileType(): FileType {
-        return MlFileType.INSTANCE
-    }
+class OcamlPsiFileRoot(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, OcamlLanguage) {
+    override fun getFileType(): FileType = MlFileType
 }

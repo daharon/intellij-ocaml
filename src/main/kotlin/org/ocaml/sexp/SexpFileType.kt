@@ -5,7 +5,7 @@ import org.ocaml.lang.OcamlIcons
 import org.ocaml.lang.OcamlLanguage
 import javax.swing.Icon
 
-class SexpFileType : LanguageFileType(OcamlLanguage.INSTANCE) {
+class SexpFileType : LanguageFileType(OcamlLanguage) {
 
     companion object {
         val INSTANCE = SexpFileType()

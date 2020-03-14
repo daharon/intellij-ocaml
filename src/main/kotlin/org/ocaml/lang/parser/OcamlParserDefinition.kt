@@ -20,11 +20,10 @@ import org.ocaml.lang.parser.psi.OcamlCompositeElementTypes
 /**
  * Created by sidharthkuruvila on 07/05/16.
  */
-
-class OcamlParserDefinition : ParserDefinition {
+open class OcamlParserDefinition : ParserDefinition {
 
     companion object {
-        val FILE = IFileElementType(OcamlLanguage.INSTANCE);
+        val FILE = IFileElementType(OcamlLanguage)
     }
 
     override fun createParser(project: Project?): PsiParser? {

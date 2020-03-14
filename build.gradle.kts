@@ -6,9 +6,12 @@ import org.jetbrains.intellij.tasks.PatchPluginXmlTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 
+val generatedSourceDir = "gen"
+
+
 plugins {
     id("idea")
-    id("org.jetbrains.intellij") version "0.4.6"
+    id("org.jetbrains.intellij") version "0.4.16"
     id("org.jetbrains.grammarkit") version "2020.1"
     java
     kotlin("jvm") version "1.3.70"
@@ -16,8 +19,6 @@ plugins {
 
 group = "kuruvila"
 version = "0.0.1-SNAPSHOT"
-
-val generatedSourceDir = "gen"
 
 repositories {
     mavenCentral()
@@ -65,7 +66,7 @@ tasks {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${property("kotlinVersion")}")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.10.3")
 
     testCompile("junit:junit:4.12")
@@ -111,11 +112,11 @@ task<GenerateParser>("generateJbuildPsiAndParser") {
 
 tasks.withType<KotlinCompile> {
     dependsOn(
-            "generateOcamlLexer",
-            "generateOcamlPsiAndParser",
-            "generateSexpLexer",
-            "generateSexpPsiAndParser",
-            "generateJbuildPsiAndParser"
+        "generateOcamlLexer",
+        "generateOcamlPsiAndParser",
+        "generateSexpLexer",
+        "generateSexpPsiAndParser",
+        "generateJbuildPsiAndParser"
     )
 }
 

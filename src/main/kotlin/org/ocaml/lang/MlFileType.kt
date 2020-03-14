@@ -6,28 +6,13 @@ import javax.swing.Icon
 /**
  * Created by sidharthkuruvila on 27/04/16.
  */
+object MlFileType : LanguageFileType(OcamlLanguage) {
 
-class MlFileType : LanguageFileType(OcamlLanguage.INSTANCE) {
+    override fun getDescription(): String = "Ocaml source file"
 
-    companion object {
-        val INSTANCE = MlFileType()
+    override fun getDefaultExtension(): String = "ml"
 
-    }
-    override fun getDescription(): String {
-        return "Ocaml source file"
-    }
+    override fun getName(): String = "Ocaml file"
 
-    override fun getDefaultExtension(): String {
-        return "ml"
-    }
-
-
-    override fun getName(): String {
-        return "Ocaml File"
-    }
-
-    override fun getIcon(): Icon? {
-        return OcamlIcons.MODULE_ICON_FILE
-    }
-
+    override fun getIcon(): Icon? = OcamlIcons.MODULE_ICON_FILE
 }
