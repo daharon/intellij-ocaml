@@ -72,7 +72,7 @@ library_stanza_options ::=
   | sexp
 
 
-executable_stanza ::= "(" "executable" "(" name_option public_name_option? executable_stanza_options * ")" ")"
+executable_stanza ::= "(" "executable" name_option public_name_option? executable_stanza_options * ")"
 
 executable_stanza_options ::=
     package_option
@@ -88,7 +88,7 @@ executable_stanza_options ::=
   | allow_overlapping_dependencies_option
 
 
-executables_stanza ::= "(" "executables_stanza" "(" names_option public_names_option? executable_stanza_options * ")" ")"
+executables_stanza ::= "(" "executables_stanza" names_option public_names_option? executable_stanza_options * ")"
 
 version_stanza ::= "(" "jbuild_version" "1" ")"
 

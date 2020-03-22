@@ -26,7 +26,7 @@ import org.ocaml.sexp.parser.psi.SexpCompositeElementTypes
 class SexpParserDefinition : ParserDefinition {
 
     companion object {
-        val FILE = IFileElementType(SexpLanguage.INSTANCE)
+        val FILE = IFileElementType(SexpLanguage)
     }
 
     override fun createParser(project: Project?): PsiParser? {

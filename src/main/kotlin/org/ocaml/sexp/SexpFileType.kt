@@ -1,31 +1,17 @@
 package org.ocaml.sexp
 
 import com.intellij.openapi.fileTypes.LanguageFileType
-import org.ocaml.lang.OcamlIcons
-import org.ocaml.lang.OcamlLanguage
 import javax.swing.Icon
 
-class SexpFileType : LanguageFileType(OcamlLanguage) {
+import org.ocaml.lang.OcamlIcons
 
-    companion object {
-        val INSTANCE = SexpFileType()
+object SexpFileType : LanguageFileType(SexpLanguage) {
 
-    }
-    override fun getDescription(): String {
-        return "Ocaml sexp"
-    }
+    override fun getDescription(): String = "Ocaml sexp"
 
-    override fun getDefaultExtension(): String {
-        return "sexp"
-    }
+    override fun getDefaultExtension(): String = "sexp"
 
+    override fun getName(): String = "Sexp File"
 
-    override fun getName(): String {
-        return "Sexp File"
-    }
-
-    override fun getIcon(): Icon? {
-        return OcamlIcons.MODULE_ICON_FILE
-    }
-
+    override fun getIcon(): Icon? = OcamlIcons.MODULE_ICON_FILE
 }

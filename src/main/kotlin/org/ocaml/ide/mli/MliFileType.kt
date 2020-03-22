@@ -10,7 +10,7 @@ import org.ocaml.lang.OcamlIcons
  */
 object MliFileType : LanguageFileType(OcamlInterfaceLanguage) {
 
-    override fun getDescription(): String = "Ocaml interface file"
+    override fun getDescription(): String = "Ocaml interface source file"
 
     override fun getDefaultExtension(): String = "mli"
 

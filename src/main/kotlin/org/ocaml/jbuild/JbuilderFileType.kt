@@ -1,30 +1,17 @@
 package org.ocaml.jbuild
 
 import com.intellij.openapi.fileTypes.LanguageFileType
-import org.ocaml.lang.OcamlIcons
 import javax.swing.Icon
 
-class JbuilderFileType : LanguageFileType(JbuilderLanguage) {
+import org.ocaml.lang.OcamlIcons
 
-    companion object {
-        val INSTANCE = JbuilderFileType()
+object JbuilderFileType : LanguageFileType(JbuilderLanguage, true) {
 
-    }
-    override fun getDescription(): String {
-        return "Jbuilder config"
-    }
+    override fun getDescription(): String = "Jbuilder config"
 
-    override fun getDefaultExtension(): String {
-        return "jbuild"
-    }
+    override fun getDefaultExtension(): String = "jbuild"
 
+    override fun getName(): String = "Jbuilder File"
 
-    override fun getName(): String {
-        return "Jbuilder File"
-    }
-
-    override fun getIcon(): Icon? {
-        return OcamlIcons.MODULE_ICON_FILE
-    }
-
+    override fun getIcon(): Icon? = OcamlIcons.MODULE_ICON_FILE
 }
