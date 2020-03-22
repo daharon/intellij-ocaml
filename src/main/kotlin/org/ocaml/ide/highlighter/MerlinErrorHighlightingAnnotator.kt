@@ -3,13 +3,15 @@ package org.ocaml.ide.highlighter
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.ExternalAnnotator
 import com.intellij.lang.annotation.HighlightSeverity
-import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.components.service
 import com.intellij.openapi.diagnostic.Logger
+import com.intellij.openapi.project.guessProjectForFile
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiFile
 import org.jetbrains.annotations.NotNull
-import org.ocaml.ide.components.MerlinServiceComponent
+
 import org.ocaml.ide.runconfig.OcamlRunner
+import org.ocaml.ide.service.MerlinService
 import org.ocaml.merlin.MerlinError
 import org.ocaml.util.LineNumbering
 
@@ -31,14 +33,15 @@ class MerlinErrorHighlightingAnnotator : ExternalAnnotator<MerlinInfo, Results>(
     }
 
     //TODO Add some intelligence here to help decide whether the annotator should run
-    override fun collectInformation(@NotNull file: PsiFile): MerlinInfo? {
-        val component = ApplicationManager.getApplication().getComponent(MerlinServiceComponent::class.java)
-        return MerlinInfo(file, file.text, component)
+    override fun collectInformation(@NotNull file: PsiFile): MerlinInfo {
+        val merlinService = guessProjectForFile(file.virtualFile)
+            ?.service<MerlinService>()
+        return MerlinInfo(file, file.text, merlinService)
     }
 
     override fun doAnnotate(merlinInfo: MerlinInfo): Results? {
         val ln = LineNumbering(merlinInfo.source)
-        val errors = merlinInfo.merlinService.errors(merlinInfo.file)
+        val errors = merlinInfo.merlinService?.errors(merlinInfo.file) ?: emptyList()
         return Results(errors, ln)
     }
 
@@ -55,12 +58,12 @@ class MerlinErrorHighlightingAnnotator : ExternalAnnotator<MerlinInfo, Results>(
             holder.createAnnotation(severity, range, message)
         }
     }
-
 }
 
 data class MerlinInfo(
         val file: PsiFile,
         val source: String,
-        val merlinService: MerlinServiceComponent)
+        val merlinService: MerlinService?
+)
 
 data class Results(val errors: List<MerlinError>, val lineNumbering: LineNumbering)

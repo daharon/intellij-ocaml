@@ -15,13 +15,6 @@
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.lang</depends>
 
-    <application-components>
-        <component>
-            <interface-class>org.ocaml.ide.components.MerlinServiceComponent</interface-class>
-            <implementation-class>org.ocaml.ide.components.impl.MerlinServiceComponentImpl</implementation-class>
-        </component>
-    </application-components>
-
     <extensions defaultExtensionNs="com.intellij">
 
         <colorSettingsPage implementation="org.ocaml.ide.colorscheme.OcamlColorSettingsPage"/>
@@ -75,9 +68,7 @@
                    implementationClass="org.ocaml.jbuild.highlighter.JbuilderHighlightingAnnotator"/>
 
         <!-- Services -->
-        <!--
         <projectService serviceImplementation="org.ocaml.ide.service.MerlinService"/>
-        -->
     </extensions>
 
     <actions>

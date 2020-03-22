@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.intellij.openapi.diagnostic.Logger
+import com.intellij.openapi.project.Project
+
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
@@ -17,23 +19,22 @@ class Merlin(private val objectMapper: ObjectMapper, private val merlinProcess: 
     companion object {
         private val LOG = Logger.getInstance(Merlin::class.java)
 
-        val opamCommand = OpamCommand()
-
-        private fun merlinInstance(): Merlin {
-            val p = merlinProcess()
+        private fun merlinInstance(project: Project): Merlin {
+            val p = merlinProcess(project)
             val om = ObjectMapper()
             om.registerModule(KotlinModule())
             val m = Merlin(om, p)
             return m
         }
 
-        private fun merlinProcess(): Process {
-            val pb = opamCommand.processBuilder("ocamlmerlin")
+        private fun merlinProcess(project: Project): Process {
+            val rootDir = project.basePath ?: System.getProperty("user.home")
+            val pb = OpamCommand.processBuilder(rootDir, "ocamlmerlin")
             return pb.start()
         }
 
-        fun newInstance(): Merlin {
-            return merlinInstance()
+        fun newInstance(project: Project): Merlin {
+            return merlinInstance(project)
         }
     }
 

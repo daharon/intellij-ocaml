@@ -2,16 +2,16 @@ package org.ocaml.ide.completion
 
 import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.LookupElementBuilder
-import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.components.service
+import com.intellij.openapi.project.guessProjectForFile
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.util.ProcessingContext
-import org.ocaml.ide.components.MerlinServiceComponent
+
+import org.ocaml.ide.service.MerlinService
 import org.ocaml.util.LineNumbering
 import org.ocaml.util.ReversedSubstringCharSequence
 
 class OcamlCompletionContributor : CompletionContributor() {
-
-    val merlinService = ApplicationManager.getApplication().getComponent(MerlinServiceComponent::class.java)!!
 
     init {
 
@@ -21,6 +21,9 @@ class OcamlCompletionContributor : CompletionContributor() {
                                                 context: ProcessingContext,
                                                 resultSet: CompletionResultSet) {
                         val ln = LineNumbering(parameters.originalFile.text)
+                        val merlinService = guessProjectForFile(parameters.originalFile.virtualFile)
+                            ?.service<MerlinService>()
+                            ?: return
                         val completions = merlinService.completions(parameters.originalFile,
                                 findSuitablePrefix(parameters), ln.position(parameters.offset))
                         for (completion in completions) {

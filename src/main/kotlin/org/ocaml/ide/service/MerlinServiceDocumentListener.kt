@@ -1,4 +1,4 @@
-package org.ocaml.ide.components
+package org.ocaml.ide.service
 
 import com.intellij.openapi.editor.event.DocumentEvent
 import com.intellij.openapi.editor.event.DocumentListener
