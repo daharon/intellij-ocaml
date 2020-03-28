@@ -13,5 +13,5 @@ object OpamCommand {
             )
 
     private fun makeCommandString(vararg parameters: String): String =
-        "eval $(opam env) ; ${parameters.joinToString(" ")}"
+        parameters.joinToString(" ")
 }

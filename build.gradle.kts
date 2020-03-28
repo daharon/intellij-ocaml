@@ -15,6 +15,7 @@ plugins {
     id("org.jetbrains.grammarkit") version "2020.1"
     java
     kotlin("jvm") version "1.3.70"
+    kotlin("plugin.serialization") version "1.3.70"
 }
 
 group = "kuruvila"
@@ -59,14 +60,18 @@ tasks {
     }
     compileKotlin {
         kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions.freeCompilerArgs = listOf("-Xuse-experimental=kotlinx.serialization.ImplicitReflectionSerializer")
     }
     compileTestKotlin {
         kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions.freeCompilerArgs = listOf("-Xuse-experimental=kotlinx.serialization.ImplicitReflectionSerializer")
     }
 }
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0")
+    // TODO: Remove Jackson once Kotlin Serialization is finished.
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.10.3")
 
     testCompile("junit:junit:4.12")

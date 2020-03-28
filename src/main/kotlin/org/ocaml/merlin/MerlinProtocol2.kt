@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.intellij.openapi.diagnostic.Logger
-import com.intellij.openapi.project.Project
 
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -14,28 +13,26 @@ import java.io.OutputStreamWriter
 /**
  * Created by sidharthkuruvila on 30/04/16.
  */
-class Merlin(private val objectMapper: ObjectMapper, private val merlinProcess: Process) {
+class MerlinProtocol2(private val objectMapper: ObjectMapper, private val merlinProcess: Process) {
 
     companion object {
-        private val LOG = Logger.getInstance(Merlin::class.java)
+        private val LOG = Logger.getInstance(MerlinProtocol2::class.java)
 
-        private fun merlinInstance(project: Project): Merlin {
-            val p = merlinProcess(project)
+        private fun merlinInstance(): MerlinProtocol2 {
+            val p = merlinProcess()
             val om = ObjectMapper()
             om.registerModule(KotlinModule())
-            val m = Merlin(om, p)
+            val m = MerlinProtocol2(om, p)
             return m
         }
 
-        private fun merlinProcess(project: Project): Process {
-            val rootDir = project.basePath ?: System.getProperty("user.home")
-            val pb = OpamCommand.processBuilder(rootDir, "ocamlmerlin")
+        private fun merlinProcess(): Process {
+            val rootDir = System.getProperty("user.home")
+            val pb = OpamCommand.processBuilder(rootDir, "ocamlmerlin", "old-protocol")
             return pb.start()
         }
 
-        fun newInstance(project: Project): Merlin {
-            return merlinInstance(project)
-        }
+        fun newInstance(): MerlinProtocol2 = merlinInstance()
     }
 
     private val writer = OutputStreamWriter(merlinProcess.outputStream)
@@ -60,17 +57,17 @@ class Merlin(private val objectMapper: ObjectMapper, private val merlinProcess: 
     fun locate(filename: String, position: Position): LocateResponse {
         val request = """["locate", null, "ml", "at", ${objectMapper.writeValueAsString(position)}]"""
         val node = makeRequest(filename, request, object : TypeReference<JsonNode>() {})
-        if(node.isTextual) {
-            if(node.textValue() == "Already at definition point") {
-                return LocatedAtPosition
+        return if (node.isTextual) {
+            if (node.textValue() == "Already at definition point") {
+                LocatedAtPosition
             } else {
-                return LocateFailed(node.textValue())
+                LocateFailed(node.textValue())
             }
         } else {
-            if(node.get("file") == null) {
-                return objectMapper.treeToValue(node, LocatedInCurrentFile::class.java)
+            if (node.get("file") == null) {
+                objectMapper.treeToValue(node, LocatedInCurrentFile::class.java)
             } else {
-                return objectMapper.treeToValue(node, Located::class.java)
+                objectMapper.treeToValue(node, Located::class.java)
             }
         }
     }

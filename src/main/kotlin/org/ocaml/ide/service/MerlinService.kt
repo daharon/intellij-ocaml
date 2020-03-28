@@ -1,27 +1,29 @@
 package org.ocaml.ide.service
 
-import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiFile
 
 import org.ocaml.merlin.*
 
-class MerlinService(project: Project) {
+class MerlinService {
 
-    val merlin by lazy { Merlin.newInstance(project) }
+    val merlin by lazy { MerlinProtocol2.newInstance() }
 
     fun errors(file: PsiFile): List<MerlinError> {
         reloadFileIfModified(file)
+        MerlinProtocol3().errors(file.virtualFile)
         return merlin.errors(file.virtualFile.canonicalPath!!)
     }
 
     fun completions(file: PsiFile, prefix: String, position: Position): List<CompletionEntry> {
         reloadFileIfModified(file)
+        MerlinProtocol3().completePrefix(file.virtualFile, prefix, position)
         return merlin.complete(file.virtualFile.canonicalPath!!, prefix, position).entries
     }
 
     fun locate(file: PsiFile, position: Position): LocateResponse {
         reloadFileIfModified(file)
+        MerlinProtocol3().locate(file.virtualFile, position)
         return merlin.locate(file.virtualFile.canonicalPath!!, position)
     }
 
