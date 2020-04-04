@@ -13,17 +13,19 @@ import java.io.File
 
 class OcamlFileRunProfileState(environment: ExecutionEnvironment) : CommandLineState(environment) {
     lateinit var filename: String
+
     override fun startProcess(): ProcessHandler {
 
         val fn = filename
 
         val commandLine = GeneralCommandLine("bash", "-c", buildAndRunCmd(environment, fn))
-        commandLine.workDirectory = File(environment.project.baseDir.path)
-        val oph = OSProcessHandler(commandLine)
-        return oph
+        environment.project.basePath?.run {
+            commandLine.workDirectory = File(this)
+        }
+        return OSProcessHandler(commandLine)
     }
 
-    fun buildAndRunCmd(environment: ExecutionEnvironment, filepath: String) : String {
+    private fun buildAndRunCmd(environment: ExecutionEnvironment, filepath: String) : String {
         val basePath = environment.project.baseDir
 
         val relFilename = File(filepath).toRelativeString(File(basePath.path))
@@ -33,8 +35,6 @@ class OcamlFileRunProfileState(environment: ExecutionEnvironment) : CommandLineS
         }
 
         val outputFile = relFilename.toString().replace(".ml", ".native")
-        val s = "pwd && ocamlbuild $outputFile && ./$outputFile"
-        return s
+        return "pwd && ocamlbuild $outputFile && ./$outputFile"
     }
-
 }
