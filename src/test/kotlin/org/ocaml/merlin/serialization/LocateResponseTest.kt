@@ -1,10 +1,8 @@
 package org.ocaml.merlin.serialization
 
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonConfiguration
 import org.junit.Test
 
-import org.ocaml.merlin.Locate3
+import org.ocaml.merlin.LocateResponseValue
 import org.ocaml.merlin.MerlinResponse
 
 import kotlin.test.assertEquals
@@ -14,24 +12,19 @@ import kotlin.test.assertEquals
  */
 class LocateResponseTest {
 
-    private val json: Json by lazy {
-        val config = JsonConfiguration.Stable
-            .copy(ignoreUnknownKeys = true)
-        Json(config)
-    }
-
     @Test
     fun `Locate responds with an error`() {
-        val expected = Locate3.NotFound("Not a valid identifier")
+        val expected = LocateResponseValue.NotFound("Not a valid identifier")
         val response = """{
             "class": "return",
             "value": "${expected.message}",
-            "notifications":[]
+            "notifications": []
         }""".trimIndent()
 
-        val parsedResponse: MerlinResponse<Locate3> = json.parse(MerlinResponse.serializer(Locate3.serializer()), response)
+        val parsedResponse: MerlinResponse<LocateResponseValue> =
+            json.parse(MerlinResponse.serializer(LocateResponseValue.serializer()), response)
 
-        assert(parsedResponse.value is Locate3.NotFound)
+        assert(parsedResponse.value is LocateResponseValue.NotFound)
         assertEquals(expected, parsedResponse.value)
     }
 
@@ -44,12 +37,12 @@ class LocateResponseTest {
             },
             "notifications":[]
         }""".trimIndent()
-        val expected = Locate3.FoundLocal(position = "1:1")
+        val expected = LocateResponseValue.FoundLocal(position = "1:1")
 
-        val parsedResponse: MerlinResponse<Locate3> = json.parse(MerlinResponse.serializer(Locate3.serializer()), response)
+        val parsedResponse: MerlinResponse<LocateResponseValue> = json.parse(MerlinResponse.serializer(LocateResponseValue.serializer()), response)
 
-        assert(parsedResponse.value is Locate3.FoundLocal)
-        assertEquals(expected.position, (parsedResponse.value as Locate3.FoundLocal).position)
+        assert(parsedResponse.value is LocateResponseValue.FoundLocal)
+        assertEquals(expected.position, (parsedResponse.value as LocateResponseValue.FoundLocal).position)
     }
 
     @Test
@@ -62,12 +55,12 @@ class LocateResponseTest {
             },
             "notifications":[]
         }""".trimIndent()
-        val expected = Locate3.FoundNotLocal(file = "/path/to/test.ml", position = "1:1")
+        val expected = LocateResponseValue.FoundNotLocal(file = "/path/to/test.ml", position = "1:1")
 
-        val parsedResponse: MerlinResponse<Locate3> = json.parse(MerlinResponse.serializer(Locate3.serializer()), response)
+        val parsedResponse: MerlinResponse<LocateResponseValue> = json.parse(MerlinResponse.serializer(LocateResponseValue.serializer()), response)
 
-        assert(parsedResponse.value is Locate3.FoundNotLocal)
-        assertEquals(expected.position, (parsedResponse.value as Locate3.FoundNotLocal).position)
-        assertEquals(expected.file, (parsedResponse.value as Locate3.FoundNotLocal).file)
+        assert(parsedResponse.value is LocateResponseValue.FoundNotLocal)
+        assertEquals(expected.position, (parsedResponse.value as LocateResponseValue.FoundNotLocal).position)
+        assertEquals(expected.file, (parsedResponse.value as LocateResponseValue.FoundNotLocal).file)
     }
 }

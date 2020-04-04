@@ -86,10 +86,11 @@ class MerlinProtocol3 {
      *
      * [Merlin: complete-prefix](https://github.com/ocaml/merlin/blob/master/doc/dev/PROTOCOL.md#complete-prefix--position-position---doc-bool---prefix-string---types-bool-)
      */
-    fun completePrefix(file: VirtualFile, prefix: String, position: Position) {
+    fun completePrefix(file: VirtualFile, prefix: String, position: Position): MerlinResponse<CompletePrefixResponseValue> {
         log.info("Complete-prefix was hit!")
-        val command = CompletePrefix(file, position, prefix)
-        executeRequest<CompletePrefix2>(command)
+        val request = CompletePrefixRequest(file, position)
+        val response: MerlinResponse<CompletePrefixResponseValue> = executeRequest(request)
+        return response
     }
 
     /**
@@ -97,11 +98,11 @@ class MerlinProtocol3 {
      *
      * [Merlin: errors](https://github.com/ocaml/merlin/blob/master/doc/dev/PROTOCOL.md#errors)
      */
-    fun errors(file: VirtualFile): List<Error> {
+    fun errors(file: VirtualFile): MerlinResponse<ErrorsResponseValue> {
         log.info("Errors checker was hit!")
-        val command = Errors(file)
-        executeRequest<Error>(command)
-        return emptyList()
+        val request = ErrorsRequest(file)
+        val response: MerlinResponse<ErrorsResponseValue> = executeRequest(request)
+        return response
     }
 
     /**
@@ -109,14 +110,17 @@ class MerlinProtocol3 {
      *
      * [Merlin: locate](https://github.com/ocaml/merlin/blob/master/doc/dev/PROTOCOL.md#locate---prefix-string---position-position---look-for-interfaceimplementation-)
      */
-    fun locate(file: VirtualFile, position: Position): MerlinResponse<Locate3> {
+    fun locate(file: VirtualFile, position: Position): MerlinResponse<LocateResponseValue> {
         log.info("Locate was hit!")
-        val command = Locate(file, position)
-        return executeRequest<Locate3>(command)
+        val request = LocateRequest(file, position)
+        val response: MerlinResponse<LocateResponseValue> = executeRequest(request)
+        return response
     }
 
-    private inline fun <reified T : MerlinResponseValue> executeRequest(command: MerlinCommand): MerlinResponse<T> {
-        log.info("Processing Merlin command:  $command")
+    private inline fun <I : MerlinRequest, T : MerlinResponseValue, reified O : MerlinResponse<T>> executeRequest(request: I): O {
+        log.info("Processing Merlin command:  $request")
+        val parameters = request.parameters()
+        /*
         val parameters: Array<String> = when (command) {
             is CompletePrefix -> arrayOf(
                 "-filename",
@@ -140,13 +144,14 @@ class MerlinProtocol3 {
                 "${command.position.line}:${command.position.col}"
             )
         }
+        */
         log.info("Merlin parameters:  ${parameters.joinToString()}")
-        val merlinProcess = processBuilder(command, *parameters)
+        val merlinProcess = processBuilder(request.command, *parameters)
             .start()
         log.info("Merlin process:  $merlinProcess")
         val merlinWriter = OutputStreamWriter(merlinProcess.outputStream)
         val merlinReader = BufferedReader(InputStreamReader(merlinProcess.inputStream))
-        val fileReader = BufferedReader(InputStreamReader(command.file.inputStream))
+        val fileReader = BufferedReader(InputStreamReader(request.file.inputStream))
         merlinWriter.write(fileReader.readText())
         merlinWriter.flush()
         merlinWriter.close()
@@ -157,10 +162,7 @@ class MerlinProtocol3 {
         merlinReader.close()
         merlinProcess.waitFor()
 
-        val parsedResponse: MerlinResponse<T> = json.parse(
-            MerlinResponse.serializer(T::class.serializer()),
-            merlinResponse
-        )
+        val parsedResponse: O = json.parse(O::class.serializer(), merlinResponse)
         log.info("Parsed response from Merlin:  $parsedResponse")
         return parsedResponse
 
@@ -190,12 +192,12 @@ class MerlinProtocol3 {
         }
     }
 
-    private fun processBuilder(command: MerlinCommand, vararg parameters: String): ProcessBuilder =
+    private fun processBuilder(command: String, vararg parameters: String): ProcessBuilder =
         ProcessBuilder()
             .directory(File(basePath))
             .command(
                 "bash", "-c",
-                arrayOf("ocamlmerlin", "server", command.value, *parameters)
+                arrayOf("ocamlmerlin", "server", command, *parameters)
                     .joinToString(separator = " ")
             )
 }

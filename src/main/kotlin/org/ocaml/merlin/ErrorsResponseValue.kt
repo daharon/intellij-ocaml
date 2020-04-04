@@ -1,25 +1,13 @@
 package org.ocaml.merlin
 
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.SerialName
+import kotlinx.serialization.*
 
-interface MerlinResponseValue
+//import org.ocaml.merlin.serializers.ErrorsResponseValueSerializer
 
-/*
-/**
- * Super-class of all Merlin response objects.
- */
-@Serializable
-sealed class MerlinResponseValue
 
-/**
- * Merlin `complete-prefix` response.
- */
-@Serializable
-data class CompletePrefix2(
-    val context: List<Map<String, String>>?,
-    val entries: List<Map<String, String>>
-) : MerlinResponseValue()
+interface ErrorsResponseValue : List<Error>, MerlinResponseValue
+//@Serializable(with = ErrorsResponseValueSerializer::class)
+//class ErrorsResponseValue : ArrayList<Error>(), MerlinResponseValue
 
 /**
  * Merlin `error` response.
@@ -52,7 +40,7 @@ data class Error(
      * A classification of the error.
      */
     val type: ErrorType
-) : MerlinResponseValue() {
+) {
     @Serializable
     enum class ErrorType {
         @SerialName("type") TYPE,
@@ -70,33 +58,3 @@ data class Error(
         val message: String
     )
 }
-
-/**
- * Merlin `locate` response.
- */
-@Serializable(LocateSerializer::class)
-sealed class Locate3 : MerlinResponseValue() {
-
-    /**
-     * The message provided by Merlin if the entity was not found.
-     */
-    @Serializable
-    data class NotFound(val message: String) : Locate3()
-
-    /**
-     * The position of the entity when found within the same file.
-     */
-    @Serializable
-    data class FoundLocal(@SerialName("pos") val position: String) : Locate3()
-
-    /**
-     * The filename and position of the located entity.
-     */
-    @Serializable
-    data class FoundNotLocal(
-        val file: String,
-        @SerialName("pos")
-        val position: String
-    ) : Locate3()
-}
-*/
