@@ -10,6 +10,7 @@
       <w>ocaml</w>
       <w>ocamlbuild</w>
       <w>ocamlc</w>
+      <w>ocamldoc</w>
       <w>ocamlmerlin</w>
       <w>ocamlopt</w>
       <w>opam</w>

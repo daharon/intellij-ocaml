@@ -43,23 +43,27 @@ class Merlin(private val objectMapper: ObjectMapper, private val merlinProcess: 
 
     fun tellSource(filename: String, source: CharSequence): Boolean {
         val request = """["tell", "start", "end", ${objectMapper.writeValueAsString(source)}]"""
+        LOG.info("Tell source request:  $request")
         return makeRequest(filename, request, object : TypeReference<Boolean>() {})
     }
 
-
     fun errors(filename: String): List<MerlinError> {
         val request = """["errors"]"""
+        LOG.info("Errors request:  $request")
         return makeRequest(filename, request, object : TypeReference<List<MerlinError>>() {})
     }
 
     fun complete(filename: String, prefix: String, position: Position): Completions {
         val request = """["expand", "prefix", ${objectMapper.writeValueAsString(prefix)}, "at", ${objectMapper.writeValueAsString(position)}]"""
+        LOG.info("Complete request:  $request")
         return makeRequest(filename, request, object : TypeReference<Completions>() {})
     }
 
     fun locate(filename: String, position: Position): LocateResponse {
         val request = """["locate", null, "ml", "at", ${objectMapper.writeValueAsString(position)}]"""
+        LOG.info("Locate request:  $request")
         val node = makeRequest(filename, request, object : TypeReference<JsonNode>() {})
+        LOG.info("Locate response:  $node")
         if(node.isTextual) {
             if(node.textValue() == "Already at definition point") {
                 return LocatedAtPosition
@@ -74,6 +78,23 @@ class Merlin(private val objectMapper: ObjectMapper, private val merlinProcess: 
             }
         }
     }
+
+    /**
+     * Returns OCamldoc documentation as a [String], either for the given qualified identifier
+     * or the one at the specified position.
+     */
+    fun document(filename: String, position: Position, identifier: String?): String {
+        val request = """["document", ${objectMapper.writeValueAsString(identifier)}, "at", ${objectMapper.writeValueAsString(position)}]"""
+        LOG.info("Document request:  $request")
+        return makeRequest(filename, request, object : TypeReference<String>() {})
+    }
+
+    fun typeEnclosing(filename: String, position: Position): String {
+        val request = """["type", "enclosing", "at", ${objectMapper.writeValueAsString(position)}]"""
+        LOG.info("Type Enclosing request:  $request")
+        return makeRequest(filename, request, object : TypeReference<String>() {})
+    }
+
 //    TODO Not working on merlin, find an alternative.
 //    fun dumpTokens(filename: String): List<Token> {
 //        val request = """["dump", "tokens"]"""
@@ -82,11 +103,13 @@ class Merlin(private val objectMapper: ObjectMapper, private val merlinProcess: 
 
     fun dumpBrowse(filename: String): List<BrowseNode> {
         val request = """["dump", "browse"]"""
+        LOG.info("Dump browse request:  $request")
         return makeRequest(filename, request, object : TypeReference<List<BrowseNode>>() {})
     }
 
     fun dumpBrowse2(filename: String): JsonNode {
         val request = """["dump", "browse"]"""
+        LOG.info("Dump browse #2 request:  $request")
         return makeRequest(filename, request, object : TypeReference<JsonNode>() {})
     }
 

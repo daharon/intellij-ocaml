@@ -29,6 +29,7 @@
         <completion.contributor language="Ocaml"
                                 implementationClass="org.ocaml.ide.completion.OcamlCompletionContributor"/>
         <lang.commenter language="Ocaml" implementationClass="org.ocaml.ide.commenter.OcamlCommenter"/>
+        <lang.documentationProvider language="Ocaml" implementationClass="org.ocaml.ide.documentation.OcamlDocumentationProvider"/>
 
         <!-- *.mli files -->
         <fileType name="Ocaml interface file" language="Ocaml Interface"
@@ -41,6 +42,7 @@
         <completion.contributor language="Ocaml Interface"
                                 implementationClass="org.ocaml.ide.completion.OcamlCompletionContributor"/>
         <lang.commenter language="Ocaml Interface" implementationClass="org.ocaml.ide.commenter.OcamlCommenter"/>
+        <lang.documentationProvider language="Ocaml" implementationClass="org.ocaml.ide.documentation.OcamlDocumentationProvider"/>
 
         <!-- Projects -->
         <moduleType id="OcamlModuleType" implementationClass="org.ocaml.ide.project.OcamlModuleType"/>

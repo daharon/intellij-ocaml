@@ -25,6 +25,16 @@ class MerlinService(project: Project) {
         return merlin.locate(file.virtualFile.canonicalPath!!, position)
     }
 
+    fun document(file: PsiFile, position: Position, identifier: String? = null): String {
+        reloadFileIfModified(file)
+        return merlin.document(file.virtualFile.canonicalPath!!, position, identifier)
+    }
+
+    fun typeEnclosing(file: PsiFile, position: Position): String {
+        reloadFileIfModified(file)
+        return merlin.typeEnclosing(file.virtualFile.canonicalPath!!, position)
+    }
+
     private fun reloadFileIfModified(file: PsiFile) {
         val doc = PsiDocumentManager.getInstance(file.project).getCachedDocument(file)
         val filename = file.virtualFile.canonicalPath!!

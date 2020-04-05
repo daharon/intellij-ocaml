@@ -33,6 +33,10 @@ class OcamlCompletionContributor : CompletionContributor() {
                 })
     }
 
+    override fun fillCompletionVariants(parameters: CompletionParameters, result: CompletionResultSet) {
+        super.fillCompletionVariants(parameters, result)
+    }
+
     private fun findSuitablePrefix(parameters: CompletionParameters): String {
         val originalPosition = parameters.originalPosition?.textOffset ?: 0
         return findEmacsOcamlAtom(parameters.originalFile.text, originalPosition)
