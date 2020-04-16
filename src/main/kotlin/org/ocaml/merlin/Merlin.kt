@@ -84,7 +84,8 @@ class Merlin(private val objectMapper: ObjectMapper, private val merlinProcess: 
      * or the one at the specified position.
      */
     fun document(filename: String, position: Position, identifier: String?): String {
-        val request = """["document", ${objectMapper.writeValueAsString(identifier)}, "at", ${objectMapper.writeValueAsString(position)}]"""
+//        val request = """["document", ${objectMapper.writeValueAsString(identifier)}, "at", ${objectMapper.writeValueAsString(position)}]"""
+        val request = """["document", null, "at", ${objectMapper.writeValueAsString(position)}]"""
         LOG.info("Document request:  $request")
         return makeRequest(filename, request, object : TypeReference<String>() {})
     }

@@ -51,7 +51,7 @@ class OcamlDocumentationProvider : AbstractDocumentationProvider() {
     private fun psiElementToPosition(element: PsiElement): Position {
         val lineColumn = StringUtil.offsetToLineColumn(element.containingFile.text, element.textOffset)
         return Position(
-            line = if (lineColumn.line <= 0) lineColumn.line + 1 else lineColumn.line,
-            col = lineColumn.column)
+            line = lineColumn.line + 1,
+            col = lineColumn.column + 1)
     }
 }
