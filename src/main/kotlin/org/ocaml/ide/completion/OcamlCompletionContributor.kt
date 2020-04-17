@@ -24,10 +24,15 @@ class OcamlCompletionContributor : CompletionContributor() {
                         val merlinService = guessProjectForFile(parameters.originalFile.virtualFile)
                             ?.service<MerlinService>()
                             ?: return
+                        val prefix = findSuitablePrefix(parameters).trim()
                         val completions = merlinService.completions(parameters.originalFile,
-                                findSuitablePrefix(parameters), ln.position(parameters.offset))
+                                prefix, ln.position(parameters.offset))
                         for (completion in completions) {
-                            resultSet.addElement(LookupElementBuilder.create(completion.name).withTypeText(completion.desc))
+                            if (prefix in completion.name) {
+                                resultSet.addElement(
+                                    LookupElementBuilder.create(completion.name).withTypeText(completion.desc)
+                                )
+                            }
                         }
                     }
                 })

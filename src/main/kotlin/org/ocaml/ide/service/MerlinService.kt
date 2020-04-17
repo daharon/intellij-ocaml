@@ -1,48 +1,47 @@
 package org.ocaml.ide.service
 
+import com.intellij.openapi.Disposable
+import com.intellij.openapi.editor.EditorFactory
 import com.intellij.openapi.project.Project
-import com.intellij.psi.PsiDocumentManager
 import com.intellij.psi.PsiFile
 
 import org.ocaml.merlin.*
 
-class MerlinService(project: Project) {
+class MerlinService(project: Project) : Disposable {
 
     val merlin by lazy { Merlin.newInstance(project) }
 
+    init {
+        EditorFactory.getInstance().eventMulticaster.addDocumentListener(MerlinServiceDocumentListener(project), this)
+    }
+
     fun errors(file: PsiFile): List<MerlinError> {
-        reloadFileIfModified(file)
+        merlin.tellSource(file.virtualFile.canonicalPath!!, file.text)
         return merlin.errors(file.virtualFile.canonicalPath!!)
     }
 
     fun completions(file: PsiFile, prefix: String, position: Position): List<CompletionEntry> {
-        reloadFileIfModified(file)
         return merlin.complete(file.virtualFile.canonicalPath!!, prefix, position).entries
     }
 
     fun locate(file: PsiFile, position: Position): LocateResponse {
-        reloadFileIfModified(file)
         return merlin.locate(file.virtualFile.canonicalPath!!, position)
     }
 
     fun document(file: PsiFile, position: Position, identifier: String? = null): String {
-        reloadFileIfModified(file)
         return merlin.document(file.virtualFile.canonicalPath!!, position, identifier)
     }
 
     fun typeEnclosing(file: PsiFile, position: Position): String {
-        reloadFileIfModified(file)
         return merlin.typeEnclosing(file.virtualFile.canonicalPath!!, position)
     }
 
-    private fun reloadFileIfModified(file: PsiFile) {
-        val doc = PsiDocumentManager.getInstance(file.project).getCachedDocument(file)
-        val filename = file.virtualFile.canonicalPath!!
-        if (doc == null || doc.getUserData(MerlinServiceDocumentListener.DOCUMENT_CHANGED) != false) {
-            //merlin.seekExact(filename, Position(1, 0))
-            //merlin.drop(filename)
-            merlin.tellSource(filename, file.text)
-            doc?.putUserData(MerlinServiceDocumentListener.DOCUMENT_CHANGED, false)
+    fun tellSource(file: PsiFile) =
+        file.virtualFile?.canonicalPath?.let {
+            merlin.tellSource(it, file.text)
         }
+
+    override fun dispose() {
+        // TODO: Stop the Merlin process.
     }
 }

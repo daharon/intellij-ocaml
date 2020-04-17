@@ -50,13 +50,17 @@ class Merlin(private val objectMapper: ObjectMapper, private val merlinProcess: 
     fun errors(filename: String): List<MerlinError> {
         val request = """["errors"]"""
         LOG.info("Errors request:  $request")
-        return makeRequest(filename, request, object : TypeReference<List<MerlinError>>() {})
+        val response = makeRequest(filename, request, object : TypeReference<List<MerlinError>>() {})
+        LOG.info("Errors response:  $response")
+        return response
     }
 
     fun complete(filename: String, prefix: String, position: Position): Completions {
         val request = """["expand", "prefix", ${objectMapper.writeValueAsString(prefix)}, "at", ${objectMapper.writeValueAsString(position)}]"""
         LOG.info("Complete request:  $request")
-        return makeRequest(filename, request, object : TypeReference<Completions>() {})
+        val response = makeRequest(filename, request, object : TypeReference<Completions>() {})
+        LOG.info("Complete response:  $response")
+        return response
     }
 
     fun locate(filename: String, position: Position): LocateResponse {
