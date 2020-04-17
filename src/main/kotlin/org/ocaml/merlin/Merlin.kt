@@ -12,34 +12,30 @@ import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 
 /**
- * Created by sidharthkuruvila on 30/04/16.
+ * Wrapper class for the Merlin process.
  */
-class Merlin(private val objectMapper: ObjectMapper, private val merlinProcess: Process) {
+class Merlin(private val project: Project) {
+
+    private val process by lazy {
+        val rootDir = project.basePath ?: System.getProperty("user.home")
+        OpamCommand
+            .processBuilder(rootDir, "ocamlmerlin")
+            .start()
+    }
+    private val writer by lazy { OutputStreamWriter(process.outputStream) }
+    private val reader by lazy { BufferedReader(InputStreamReader(process.inputStream)) }
 
     companion object {
         private val LOG = Logger.getInstance(Merlin::class.java)
-
-        private fun merlinInstance(project: Project): Merlin {
-            val p = merlinProcess(project)
-            val om = ObjectMapper()
-            om.registerModule(KotlinModule())
-            val m = Merlin(om, p)
-            return m
-        }
-
-        private fun merlinProcess(project: Project): Process {
-            val rootDir = project.basePath ?: System.getProperty("user.home")
-            val pb = OpamCommand.processBuilder(rootDir, "ocamlmerlin")
-            return pb.start()
-        }
-
-        fun newInstance(project: Project): Merlin {
-            return merlinInstance(project)
-        }
+        private val objectMapper = ObjectMapper().registerModule(KotlinModule())
     }
 
-    private val writer = OutputStreamWriter(merlinProcess.outputStream)
-    private val reader = BufferedReader(InputStreamReader(merlinProcess.inputStream))
+    /**
+     * Stop the Merlin process.
+     */
+    fun close() {
+        process.destroy()
+    }
 
     fun tellSource(filename: String, source: CharSequence): Boolean {
         val request = """["tell", "start", "end", ${objectMapper.writeValueAsString(source)}]"""

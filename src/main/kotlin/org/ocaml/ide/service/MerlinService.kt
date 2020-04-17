@@ -7,13 +7,20 @@ import com.intellij.psi.PsiFile
 
 import org.ocaml.merlin.*
 
-class MerlinService(project: Project) : Disposable {
+/**
+ * Project-level service providing the Merlin editor service.
+ */
+class MerlinService(private val project: Project) : Disposable {
 
-    val merlin by lazy { Merlin.newInstance(project) }
+    private val merlin = Merlin(project)
 
     init {
-        EditorFactory.getInstance().eventMulticaster.addDocumentListener(MerlinServiceDocumentListener(project), this)
+        // Listen for changes so Merlin can stay current on the editor's state.
+        EditorFactory.getInstance().eventMulticaster
+            .addDocumentListener(MerlinServiceDocumentListener(project), this)
     }
+
+    override fun dispose() = merlin.close()
 
     fun errors(file: PsiFile): List<MerlinError> {
         merlin.tellSource(file.virtualFile.canonicalPath!!, file.text)
@@ -40,8 +47,4 @@ class MerlinService(project: Project) : Disposable {
         file.virtualFile?.canonicalPath?.let {
             merlin.tellSource(it, file.text)
         }
-
-    override fun dispose() {
-        // TODO: Stop the Merlin process.
-    }
 }
