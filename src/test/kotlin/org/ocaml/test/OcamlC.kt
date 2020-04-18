@@ -1,12 +1,11 @@
 package org.ocaml.test
 
 import com.intellij.openapi.util.io.FileUtil
+import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.ocaml.merlin.OpamCommand
 import java.io.File
 
-object OcamlC {
-
-    val opamCommand = OpamCommand()
+object OcamlC : BasePlatformTestCase() {
 
     /**
      * Check if file parses with ocamlc
@@ -18,7 +17,7 @@ object OcamlC {
         val fo = createTempFile()
 
         try {
-            val pb = opamCommand.processBuilder("ocamlc", "-dparsetree", src.absolutePath)
+            val pb = OpamCommand.processBuilder("ocamlc", "-dparsetree", src.absolutePath)
             pb.redirectError(fo)
             val p = pb.start()
             p.waitFor()

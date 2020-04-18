@@ -7,12 +7,15 @@
       <w>jbuild</w>
       <w>jbuilder</w>
       <w>kotlinx</w>
+      <w>menhir</w>
       <w>ocaml</w>
       <w>ocamlbuild</w>
       <w>ocamlc</w>
       <w>ocamldoc</w>
+      <w>ocamllex</w>
       <w>ocamlmerlin</w>
       <w>ocamlopt</w>
+      <w>ocamlyacc</w>
       <w>opam</w>
       <w>typer</w>
     </words>

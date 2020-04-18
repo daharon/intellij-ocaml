@@ -27,8 +27,12 @@ class MerlinService(private val project: Project) : Disposable {
         return merlin.errors(file.virtualFile.canonicalPath!!)
     }
 
+    fun completionsPartial(file: PsiFile, prefix: String, position: Position): List<CompletionEntry> {
+        return merlin.expandPrefix(file.virtualFile.canonicalPath!!, prefix, position).entries
+    }
+
     fun completions(file: PsiFile, prefix: String, position: Position): List<CompletionEntry> {
-        return merlin.complete(file.virtualFile.canonicalPath!!, prefix, position).entries
+        return merlin.completePrefix(file.virtualFile.canonicalPath!!, prefix, position).entries
     }
 
     fun locate(file: PsiFile, position: Position): LocateResponse {

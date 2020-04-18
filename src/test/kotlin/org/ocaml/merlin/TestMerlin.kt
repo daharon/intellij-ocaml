@@ -1,6 +1,6 @@
 package org.ocaml.merlin
 
-import org.junit.Assert.assertEquals
+import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.junit.Test
 import java.io.File
 
@@ -9,7 +9,7 @@ import java.io.File
  */
 
 
-class TestMerlin {
+class TestMerlin : BasePlatformTestCase() {
 
     val fn = "abc.ml"
     @Test
@@ -57,7 +57,7 @@ class TestMerlin {
                         CompletionEntry(name="ListLabels.map2", kind="Value", desc="f:('a -> 'b -> 'c) -> 'a list -> 'b list -> 'c list", info=""),
                         CompletionEntry(name="ListLabels.map", kind="Value", desc="f:('a -> 'b) -> 'a list -> 'b list", info="")).reversed(),
                 context=null)
-        val resp = m.complete(fn, "List.ma", Position(4, 21))
+        val resp = m.expandPrefix(fn, "List.ma", Position(4, 21))
         assertEquals(expected.entries.toSet(), resp.entries.toSet())
         assertEquals(expected.context, resp.context)
 
@@ -193,8 +193,6 @@ class TestMerlin {
     }
 
     private fun merlinInstance(): Merlin {
-        return Merlin.newInstance()
+        return Merlin(project)
     }
-
-
 }

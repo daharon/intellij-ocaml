@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.text.StringUtil
+import com.intellij.psi.PsiElement
 
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -51,11 +53,19 @@ class Merlin(private val project: Project) {
         return response
     }
 
-    fun complete(filename: String, prefix: String, position: Position): Completions {
+    fun expandPrefix(filename: String, prefix: String, position: Position): Completions {
         val request = """["expand", "prefix", ${objectMapper.writeValueAsString(prefix)}, "at", ${objectMapper.writeValueAsString(position)}]"""
-        LOG.info("Complete request:  $request")
+        LOG.info("Expand prefix request:  $request")
         val response = makeRequest(filename, request, object : TypeReference<Completions>() {})
-        LOG.info("Complete response:  $response")
+        LOG.info("Expand prefix response:  $response")
+        return response
+    }
+
+    fun completePrefix(filename: String, prefix: String, position: Position): Completions {
+        val request = """["complete", "prefix", ${objectMapper.writeValueAsString(prefix)}, "at", ${objectMapper.writeValueAsString(position)}]"""
+        LOG.info("Complete prefix request:  $request")
+        val response = makeRequest(filename, request, object : TypeReference<Completions>() {})
+        LOG.info("Complete prefix response:  $response")
         return response
     }
 
@@ -144,7 +154,16 @@ class Merlin(private val project: Project) {
 data class MerlinError(val start: Position?, val end: Position?, val valid: Boolean,
                        val message: String, val type: String, val sub: List<JsonNode>)
 
-data class Position(val line: Int, val col: Int)
+data class Position(val line: Int, val col: Int) {
+    companion object {
+        fun fromPsiElement(element: PsiElement): Position {
+            val lineColumn = StringUtil.offsetToLineColumn(element.containingFile.text, element.textOffset)
+            return Position(
+                line = lineColumn.line + 1,
+                col = lineColumn.column + 1)
+        }
+    }
+}
 
 data class TellResponse(val cursor: Position, val marker: Boolean)
 
@@ -154,7 +173,7 @@ data class BrowseNode(val start: Position, val end: Position, val ghost: Boolean
                       val attrs: List<String>, val kind: String, val children: List<BrowseNode>)
 
 
-data class Completions(val entries: List<CompletionEntry>, val context: CompletionContext?)
+data class Completions(val entries: List<CompletionEntry>, val context: JsonNode?)
 
 data class CompletionEntry(val name: String, val kind: String, val desc: String, val info: String)
 
