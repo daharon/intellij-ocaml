@@ -245,7 +245,7 @@ object OcamlTypes {
     @JvmField
     val COMMENT = OcamlTokenElementType("COMMENT")
     @JvmField
-    val DOCSTRING = OcamlTokenElementType("DOCSTRING")
+    val DOC_COMMENT = OcamlTokenElementType("DOC_COMMENT")
 
     @JvmField
     val SHEBANG_LINE = OcamlTokenElementType("SHEBANG_LINE")

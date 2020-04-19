@@ -66,6 +66,7 @@ KEY_CHARACTER=[^:=\ \n\r\t\f\\] | "\\ "
 %state IN_STRING
 %state IN_QUOTED_STRING
 %state IN_COMMENT
+%state IN_DOC_COMMENT
 
 %%
 
@@ -171,6 +172,7 @@ KEY_CHARACTER=[^:=\ \n\r\t\f\\] | "\\ "
         "'\\" "o" [0-3] [0-7] [0-7] "'" { return CHAR; }
         "'\\" "x" [0-9a-fA-F] [0-9a-fA-F] "'" { return CHAR; }
         "'\\" . "'" { return BAD_CHARACTER; }
+        "(**" { yybegin(IN_DOC_COMMENT); commentDepth = 1; tokenStart(); }
         "(*" { yybegin(IN_COMMENT); commentDepth = 1; tokenStart(); }
 
         "#" [ \t]* [0-9]+ [ \t]* ("\"" [^\r\n\"]* "\"")? [^\r\n] * { NEWLINE } { return COMMENT; }
@@ -273,6 +275,13 @@ KEY_CHARACTER=[^:=\ \n\r\t\f\\] | "\\ "
     "*)" { commentDepth -= 1; if(commentDepth == 0) { yybegin(INITIAL); tokenEnd(); return COMMENT; } }
     . | { NEWLINE } { }
     <<EOF>> { yybegin(INITIAL); tokenEnd(); return COMMENT; }
+}
+
+<IN_DOC_COMMENT> {
+    "(**" { commentDepth += 1; }
+    "*)" { commentDepth -= 1; if(commentDepth == 0) { yybegin(INITIAL); tokenEnd(); return DOC_COMMENT; } }
+    . | { NEWLINE } { }
+    <<EOF>> { yybegin(INITIAL); tokenEnd(); return DOC_COMMENT; }
 }
 
 

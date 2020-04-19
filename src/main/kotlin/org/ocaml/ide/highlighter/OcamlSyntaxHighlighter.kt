@@ -136,7 +136,7 @@ class OcamlSyntaxHighlighter : SyntaxHighlighterBase() {
     override fun getTokenHighlights(tokenType: IElementType?): Array<TextAttributesKey> =
         when (tokenType) {
             OcamlTypes.COMMENT -> COMMENT_KEYS
-            OcamlTypes.DOCSTRING -> DOC_COMMENT_KEYS
+            OcamlTypes.DOC_COMMENT -> DOC_COMMENT_KEYS
             OcamlTypes.STRING -> STRING_KEYS
             in BRACKET_TOKENS -> BRACKET_KEYS
             in KEYWORD_TOKENS -> KEYWORD_KEYS

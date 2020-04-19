@@ -56,7 +56,7 @@ open class OcamlParserDefinition : ParserDefinition {
     }
 
     override fun getCommentTokens(): TokenSet {
-        return TokenSet.create(OcamlTypes.COMMENT)
+        return TokenSet.create(OcamlTypes.COMMENT, OcamlTypes.DOC_COMMENT)
     }
 
     override fun getWhitespaceTokens(): TokenSet {
