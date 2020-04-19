@@ -2,6 +2,7 @@ package org.ocaml.merlin
 
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.MapperFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.intellij.openapi.diagnostic.Logger
@@ -29,7 +30,9 @@ class Merlin(private val project: Project) {
 
     companion object {
         private val LOG = Logger.getInstance(Merlin::class.java)
-        private val objectMapper = ObjectMapper().registerModule(KotlinModule())
+        private val objectMapper = ObjectMapper()
+            .registerModule(KotlinModule())
+            .enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
     }
 
     /**
@@ -100,10 +103,20 @@ class Merlin(private val project: Project) {
         return makeRequest(filename, request, object : TypeReference<String>() {})
     }
 
-    fun typeEnclosing(filename: String, position: Position): String {
+    fun typeEnclosing(filename: String, position: Position): List<TypeDefinition> {
         val request = """["type", "enclosing", "at", ${objectMapper.writeValueAsString(position)}]"""
         LOG.info("Type Enclosing request:  $request")
-        return makeRequest(filename, request, object : TypeReference<String>() {})
+        val response = makeRequest(filename, request, object : TypeReference<List<TypeDefinition>>() {})
+        LOG.info("Type Enclosing response:  $response")
+        return response
+    }
+
+    fun typeExpression(filename: String, text: String, position: Position): List<TypeDefinition> {
+        val request = """["type", "expression", ${objectMapper.writeValueAsString(text)}, "at", ${objectMapper.writeValueAsString(position)}]"""
+        LOG.info("Type Expression request:  $request")
+        val response = makeRequest(filename, request, object : TypeReference<List<TypeDefinition>>() {})
+        LOG.info("Type Expression response:  $response")
+        return response
     }
 
 //    TODO Not working on merlin, find an alternative.
@@ -125,17 +138,19 @@ class Merlin(private val project: Project) {
     }
 
 
-    private fun <T> makeRequest(filename: String, query: String, c: TypeReference<T>): T {
+    private fun <T> makeRequest(filename: String, query: String, clazz: TypeReference<T>): T {
         val request = """{"context": ["auto", ${objectMapper.writeValueAsString(filename)}],
             "query": $query
         }"""
+        LOG.info("Merlin raw request:  $request")
         writer.write(request)
         writer.write("\n")
         writer.flush()
 
-        val s = reader.readLine()
-        val response = extractResponse(objectMapper.readTree(s))
-        return objectMapper.convertValue(response, c);
+        val response = reader.readLine()
+        LOG.info("Merlin raw response:  $response")
+        val parsedResponse = extractResponse(objectMapper.readTree(response))
+        return objectMapper.convertValue(parsedResponse, clazz)
     }
 
     private fun extractResponse(t: JsonNode): JsonNode {
@@ -175,8 +190,29 @@ data class BrowseNode(val start: Position, val end: Position, val ghost: Boolean
 
 data class Completions(val entries: List<CompletionEntry>, val context: JsonNode?)
 
-data class CompletionEntry(val name: String, val kind: String, val desc: String, val info: String)
+data class CompletionEntry(val name: String, val kind: CompletionEntryKind, val desc: String, val info: String)
 
+enum class CompletionEntryKind(name: String) {
+    VALUE("value"),
+    VARIANT("variant"),
+    CONSTRUCTOR("constructor"),
+    LABEL("label"),
+    MODULE("module"),
+    SIGNATURE("signature"),
+    TYPE("type"),
+    METHOD("method"),
+    METHOD_CALL("#"),
+    EXCEPTION("exn"),
+    CLASS("class")
+}
+
+data class TypeDefinition(val start: Position, val end: Position, val type: String, val tail: TypeDefinitionTail)
+
+enum class TypeDefinitionTail(name: String) {
+    NO("no"),
+    POSITION("position"),
+    CALL("call")
+}
 
 object CompletionContext
 

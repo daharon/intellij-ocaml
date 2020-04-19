@@ -43,9 +43,11 @@ class MerlinService(private val project: Project) : Disposable {
         return merlin.document(file.virtualFile.canonicalPath!!, position, identifier)
     }
 
-    fun typeEnclosing(file: PsiFile, position: Position): String {
-        return merlin.typeEnclosing(file.virtualFile.canonicalPath!!, position)
-    }
+    fun typeEnclosing(file: PsiFile, position: Position): List<TypeDefinition> =
+        merlin.typeEnclosing(file.virtualFile.canonicalPath!!, position)
+
+    fun typeExpression(file: PsiFile, text: String, position: Position): List<TypeDefinition> =
+        merlin.typeExpression(file.virtualFile.canonicalPath!!, text, position)
 
     fun tellSource(file: PsiFile) =
         file.virtualFile?.canonicalPath?.let {
