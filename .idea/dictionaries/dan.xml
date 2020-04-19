@@ -3,6 +3,7 @@
     <words>
       <w>caml</w>
       <w>colorscheme</w>
+      <w>endline</w>
       <w>grammarkit</w>
       <w>jbuild</w>
       <w>jbuilder</w>
@@ -18,6 +19,8 @@
       <w>ocamlyacc</w>
       <w>opam</w>
       <w>typer</w>
+      <w>uident</w>
+      <w>uidentifier</w>
     </words>
   </dictionary>
 </component>
