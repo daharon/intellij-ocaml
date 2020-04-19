@@ -39,7 +39,7 @@ class OcamlCompletionContributor : CompletionContributor() {
             val position = parameters.originalPosition?.let { Position.fromPsiElement(it) }
                 ?: return
             val prefix = findPrefix(parameters.position)
-                .replaceFirst("IntellijIdeaRulezzz", "", false)
+            insertCompletions(prefix, result)
             val completions = merlinService.completionsPartial(parameters.originalFile,
                 prefix, position)
             for (completion in completions) {
@@ -49,6 +49,15 @@ class OcamlCompletionContributor : CompletionContributor() {
                         .withTypeText(completion.desc, true)
                     result.addElement(lookupElement)
                 }
+            }
+        }
+
+        /**
+         * Manually add completions for annoying cases.
+         */
+        private fun insertCompletions(prefix: String, result: CompletionResultSet) {
+            when (prefix) {
+                in "in" -> result.addElement(LookupElementBuilder.create("in").withBoldness(true))
             }
         }
 
@@ -63,7 +72,8 @@ class OcamlCompletionContributor : CompletionContributor() {
                     null -> findPrefixInner(element.parent, tail)
                     else -> findPrefixInner(element.prevSibling, element.prevSibling.text + tail)
                 }
-            return findPrefixInner(element, element.text)
+            val initial = element.text.replaceFirst("IntellijIdeaRulezzz", "", false)
+            return findPrefixInner(element, initial)
         }
 
         private fun dropCompletion(entry: CompletionEntry): Boolean =
