@@ -44,39 +44,39 @@ class Merlin(private val project: Project) {
 
     fun tellSource(filename: String, source: CharSequence): Boolean {
         val request = """["tell", "start", "end", ${objectMapper.writeValueAsString(source)}]"""
-        LOG.info("Tell source request:  $request")
+        LOG.debug("Tell source request:  $request")
         return makeRequest(filename, request, object : TypeReference<Boolean>() {})
     }
 
     fun errors(filename: String): List<MerlinError> {
         val request = """["errors"]"""
-        LOG.info("Errors request:  $request")
+        LOG.debug("Errors request:  $request")
         val response = makeRequest(filename, request, object : TypeReference<List<MerlinError>>() {})
-        LOG.info("Errors response:  $response")
+        LOG.debug("Errors response:  $response")
         return response
     }
 
     fun expandPrefix(filename: String, prefix: String, position: Position): Completions {
         val request = """["expand", "prefix", ${objectMapper.writeValueAsString(prefix)}, "at", ${objectMapper.writeValueAsString(position)}]"""
-        LOG.info("Expand prefix request:  $request")
+        LOG.debug("Expand prefix request:  $request")
         val response = makeRequest(filename, request, object : TypeReference<Completions>() {})
-        LOG.info("Expand prefix response:  $response")
+        LOG.debug("Expand prefix response:  $response")
         return response
     }
 
     fun completePrefix(filename: String, prefix: String, position: Position): Completions {
         val request = """["complete", "prefix", ${objectMapper.writeValueAsString(prefix)}, "at", ${objectMapper.writeValueAsString(position)}]"""
-        LOG.info("Complete prefix request:  $request")
+        LOG.debug("Complete prefix request:  $request")
         val response = makeRequest(filename, request, object : TypeReference<Completions>() {})
-        LOG.info("Complete prefix response:  $response")
+        LOG.debug("Complete prefix response:  $response")
         return response
     }
 
     fun locate(filename: String, position: Position): LocateResponse {
         val request = """["locate", null, "ml", "at", ${objectMapper.writeValueAsString(position)}]"""
-        LOG.info("Locate request:  $request")
+        LOG.debug("Locate request:  $request")
         val node = makeRequest(filename, request, object : TypeReference<JsonNode>() {})
-        LOG.info("Locate response:  $node")
+        LOG.debug("Locate response:  $node")
         if(node.isTextual) {
             if(node.textValue() == "Already at definition point") {
                 return LocatedAtPosition
@@ -99,23 +99,23 @@ class Merlin(private val project: Project) {
     fun document(filename: String, position: Position, identifier: String?): String {
 //        val request = """["document", ${objectMapper.writeValueAsString(identifier)}, "at", ${objectMapper.writeValueAsString(position)}]"""
         val request = """["document", null, "at", ${objectMapper.writeValueAsString(position)}]"""
-        LOG.info("Document request:  $request")
+        LOG.debug("Document request:  $request")
         return makeRequest(filename, request, object : TypeReference<String>() {})
     }
 
     fun typeEnclosing(filename: String, position: Position): List<TypeDefinition> {
         val request = """["type", "enclosing", "at", ${objectMapper.writeValueAsString(position)}]"""
-        LOG.info("Type Enclosing request:  $request")
+        LOG.debug("Type Enclosing request:  $request")
         val response = makeRequest(filename, request, object : TypeReference<List<TypeDefinition>>() {})
-        LOG.info("Type Enclosing response:  $response")
+        LOG.debug("Type Enclosing response:  $response")
         return response
     }
 
     fun typeExpression(filename: String, text: String, position: Position): List<TypeDefinition> {
         val request = """["type", "expression", ${objectMapper.writeValueAsString(text)}, "at", ${objectMapper.writeValueAsString(position)}]"""
-        LOG.info("Type Expression request:  $request")
+        LOG.debug("Type Expression request:  $request")
         val response = makeRequest(filename, request, object : TypeReference<List<TypeDefinition>>() {})
-        LOG.info("Type Expression response:  $response")
+        LOG.debug("Type Expression response:  $response")
         return response
     }
 
@@ -127,13 +127,13 @@ class Merlin(private val project: Project) {
 
     fun dumpBrowse(filename: String): List<BrowseNode> {
         val request = """["dump", "browse"]"""
-        LOG.info("Dump browse request:  $request")
+        LOG.debug("Dump browse request:  $request")
         return makeRequest(filename, request, object : TypeReference<List<BrowseNode>>() {})
     }
 
     fun dumpBrowse2(filename: String): JsonNode {
         val request = """["dump", "browse"]"""
-        LOG.info("Dump browse #2 request:  $request")
+        LOG.debug("Dump browse #2 request:  $request")
         return makeRequest(filename, request, object : TypeReference<JsonNode>() {})
     }
 
@@ -142,13 +142,13 @@ class Merlin(private val project: Project) {
         val request = """{"context": ["auto", ${objectMapper.writeValueAsString(filename)}],
             "query": $query
         }"""
-        LOG.info("Merlin raw request:  $request")
+        LOG.debug("Merlin raw request:  $request")
         writer.write(request)
         writer.write("\n")
         writer.flush()
 
         val response = reader.readLine()
-        LOG.info("Merlin raw response:  $response")
+        LOG.debug("Merlin raw response:  $response")
         val parsedResponse = extractResponse(objectMapper.readTree(response))
         return objectMapper.convertValue(parsedResponse, clazz)
     }

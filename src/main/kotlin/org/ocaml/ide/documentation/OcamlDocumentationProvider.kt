@@ -21,9 +21,9 @@ class OcamlDocumentationProvider : AbstractDocumentationProvider() {
 
     override fun getQuickNavigateInfo(element: PsiElement, originalElement: PsiElement): String? {
         // FIXME:  For some reason IntelliJ is not passing in the exact element.
-        log.info("Called ${this::class.simpleName}::getQuickNavigateInfo")
-        log.info("Element:  $element")
-        log.info("Original element:  $originalElement")
+        log.debug("Called ${this::class.simpleName}::getQuickNavigateInfo")
+        log.debug("Element:  $element")
+        log.debug("Original element:  $originalElement")
         val merlin = originalElement.project.service<MerlinService>()
         val position = Position.fromPsiElement(originalElement)
         val response = merlin.typeEnclosing(originalElement.containingFile, position)
@@ -41,7 +41,7 @@ class OcamlDocumentationProvider : AbstractDocumentationProvider() {
 
     override fun generateDoc(element: PsiElement, originalElement: PsiElement?): String? {
         val response = StringBuilder()
-        log.info("Called ${this::class.simpleName}::generateDoc")
+        log.debug("Called ${this::class.simpleName}::generateDoc")
 
         val priElement = originalElement ?: element
         val merlin = priElement.project.service<MerlinService>()
@@ -52,14 +52,14 @@ class OcamlDocumentationProvider : AbstractDocumentationProvider() {
         }
 
         val doc = this.generateHoverDoc(element, originalElement)
-        log.info("Document response:  $doc")
+        log.debug("Document response:  $doc")
         response.append(CONTENT_START).append(formatContent(doc)).append(CONTENT_END)
 
         return response.toString()
     }
 
     override fun generateHoverDoc(element: PsiElement, originalElement: PsiElement?): String? {
-        log.info("Called ${this::class.simpleName}::generateHoverDoc")
+        log.debug("Called ${this::class.simpleName}::generateHoverDoc")
         val priElement = originalElement ?: element
         val merlin = priElement.project.service<MerlinService>()
         val position = Position.fromPsiElement(priElement)

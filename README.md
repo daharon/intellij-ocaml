@@ -37,3 +37,11 @@ Install the plugin
 The plugin will be located at build/distributions/ocaml-idea-0.0.1-SNAPSHOT.zip
 
 It should be possible to install the plugin on IntelliJ IDEA versions 2016.1 and later.
+
+## Development
+
+### Debug Logging
+
+1. From the sandbox IntelliJ instance go to _Help -> Debug Log Settings_.
+1. Enter `#` followed by the class name whose debug logs you wish to see.
+    * ie. `#org.ocaml.merlin.Merlin`

@@ -11,11 +11,11 @@ import com.intellij.openapi.diagnostic.Logger
 class OcamlRunner : DefaultProgramRunner() {
     companion object {
         private val LOG = Logger.getInstance(OcamlRunner::class.java)
-        val ID = "OcamlRunner"
+        const val ID = "OcamlRunner"
     }
     override fun canRun(executorId: String, profile: RunProfile): Boolean {
-        LOG.info("Checking if ocaml runner can run for ${OcamlFileRunConfiguration::class.toString()}")
-        return DefaultRunExecutor.EXECUTOR_ID == executorId && profile is OcamlFileRunConfiguration;
+        LOG.debug("Checking if ocaml runner can run for ${OcamlFileRunConfiguration::class.simpleName}")
+        return DefaultRunExecutor.EXECUTOR_ID == executorId && profile is OcamlFileRunConfiguration
     }
 
     override fun getRunnerId(): String = ID
