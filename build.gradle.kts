@@ -27,7 +27,7 @@ repositories {
 
 intellij {
     version = property("ideaVersion").toString()
-    setPlugins("java", "coverage")
+    setPlugins("java", "coverage", "PsiViewer:193-SNAPSHOT")
     pluginName = "ocaml-idea"
     updateSinceUntilBuild = false
 }
