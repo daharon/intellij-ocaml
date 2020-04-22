@@ -28,7 +28,14 @@ class OcamlColorSettingsPage : ColorSettingsPage {
             AttributesDescriptor("String", OcamlSyntaxHighlighter.STRING),
             AttributesDescriptor("Comment", OcamlSyntaxHighlighter.COMMENT),
             AttributesDescriptor("Documentation Comment", OcamlSyntaxHighlighter.DOC_COMMENT),
-            AttributesDescriptor("Operator", OcamlSyntaxHighlighter.OPERATOR)
+            AttributesDescriptor("Operator", OcamlSyntaxHighlighter.OPERATOR),
+
+            AttributesDescriptor("Core Type", OcamlSyntaxHighlighter.CORE_TYPE),
+            AttributesDescriptor("Declared Type", OcamlSyntaxHighlighter.DECLARED_TYPE),
+            AttributesDescriptor("Declared Function", OcamlSyntaxHighlighter.DECLARED_FUNCTION),
+            AttributesDescriptor("Type Parameter", OcamlSyntaxHighlighter.TYPE_PARAMETER),
+            AttributesDescriptor("Variant", OcamlSyntaxHighlighter.CONSTRUCTOR),
+            AttributesDescriptor("Polymorphic Variant", OcamlSyntaxHighlighter.NAME_TAG)
         )
     }
 

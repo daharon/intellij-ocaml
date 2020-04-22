@@ -3,6 +3,7 @@
     <words>
       <w>caml</w>
       <w>colorscheme</w>
+      <w>darcula</w>
       <w>endline</w>
       <w>grammarkit</w>
       <w>jbuild</w>
@@ -18,6 +19,7 @@
       <w>ocamlopt</w>
       <w>ocamlyacc</w>
       <w>opam</w>
+      <w>runconfig</w>
       <w>typer</w>
       <w>uident</w>
       <w>uidentifier</w>

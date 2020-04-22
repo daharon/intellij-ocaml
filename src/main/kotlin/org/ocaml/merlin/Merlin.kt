@@ -13,6 +13,8 @@ import com.intellij.psi.PsiElement
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
 
 /**
  * Wrapper class for the Merlin process.
@@ -27,6 +29,7 @@ class Merlin(private val project: Project) {
     }
     private val writer by lazy { OutputStreamWriter(process.outputStream) }
     private val reader by lazy { BufferedReader(InputStreamReader(process.inputStream)) }
+    private val lock = ReentrantLock()
 
     companion object {
         private val LOG = Logger.getInstance(Merlin::class.java)
@@ -142,13 +145,16 @@ class Merlin(private val project: Project) {
         val request = """{"context": ["auto", ${objectMapper.writeValueAsString(filename)}],
             "query": $query
         }"""
-        LOG.debug("Merlin raw request:  $request")
-        writer.write(request)
-        writer.write("\n")
-        writer.flush()
+        val response = lock.withLock {
+            LOG.debug("Merlin raw request:  $request")
+            writer.write(request)
+            writer.write("\n")
+            writer.flush()
 
-        val response = reader.readLine()
-        LOG.debug("Merlin raw response:  $response")
+            val response = reader.readLine()
+            LOG.debug("Merlin raw response:  $response")
+            response
+        }
         val parsedResponse = extractResponse(objectMapper.readTree(response))
         return objectMapper.convertValue(parsedResponse, clazz)
     }

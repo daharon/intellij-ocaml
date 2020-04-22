@@ -1,0 +1,35 @@
+<?xml version='1.0'?>
+<list>
+    <option name="OCAML_CORE_TYPE">
+        <value>
+            <option name="FOREGROUND" value="6897BB"/>
+        </value>
+    </option>
+    <option name="OCAML_DECLARED_TYPE">
+        <value>
+            <option name="FOREGROUND" value="6897BB"/>
+        </value>
+    </option>
+    <option name="OCAML_DECLARED_FUNCTION">
+        <value>
+            <option name="FOREGROUND" value="FFC66D"/>
+        </value>
+    </option>
+    <option name="OCAML_TYPE_PARAMETER">
+        <value>
+            <option name="FOREGROUND" value="20999D"/>
+        </value>
+    </option>
+    <option name="OCAML_CONSTRUCTOR">
+        <value>
+            <option name="FOREGROUND" value="A9B7C6"/>
+            <option name="FONT_TYPE" value="1"/> <!-- Bold -->
+        </value>
+    </option>
+    <option name="OCAML_NAME_TAG">
+        <value>
+            <option name="FOREGROUND" value="A9B7C6"/>
+            <option name="FONT_TYPE" value="3"/> <!-- Bold & Italic -->
+        </value>
+    </option>
+</list>

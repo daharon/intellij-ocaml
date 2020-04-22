@@ -9,6 +9,7 @@ import com.intellij.psi.util.elementType
 
 import org.ocaml.ide.service.MerlinService
 import org.ocaml.lang.lexer.OcamlTypes
+import org.ocaml.lang.parser.OcamlPsiFileRoot
 import org.ocaml.lang.parser.psi.*
 import org.ocaml.merlin.Position
 
@@ -18,7 +19,7 @@ import org.ocaml.merlin.Position
  * See [InlayParameterHintsProvider] documentation.
  */
 @Suppress("UnstableApiUsage")
-class OcamlInlayParameterInlayHintsProvider : InlayParameterHintsProvider {
+class OcamlInlayParameterHintsProvider : InlayParameterHintsProvider {
 
     override fun getParameterHints(element: PsiElement?): MutableList<InlayInfo> {
         val output = mutableListOf<InlayInfo>()
@@ -29,7 +30,7 @@ class OcamlInlayParameterInlayHintsProvider : InlayParameterHintsProvider {
             )
             outputList.add(info)
         }
-        if (element != null) {
+        if (element != null && element !is OcamlPsiFileRoot) {
             val merlin by lazy { element.project.service<MerlinService>() }
             when {
                 // Anonymous function parameters (fun ... -> ...).
