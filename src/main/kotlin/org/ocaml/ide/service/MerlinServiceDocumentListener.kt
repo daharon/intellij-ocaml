@@ -1,24 +1,25 @@
 package org.ocaml.ide.service
 
 import com.intellij.openapi.components.service
-import com.intellij.openapi.editor.event.DocumentEvent
-import com.intellij.openapi.editor.event.DocumentListener
+import com.intellij.openapi.editor.Document
+import com.intellij.openapi.editor.event.BulkAwareDocumentListener
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiDocumentManager
 
 /**
  * Listen to document changes and update the state of Merlin.
  */
-class MerlinServiceDocumentListener(private val project: Project) : DocumentListener {
+class MerlinServiceDocumentListener(private val project: Project) : BulkAwareDocumentListener.Simple {
 
     private val merlin by lazy { project.service<MerlinService>() }
 
-    override fun documentChanged(event: DocumentEvent) {
-        PsiDocumentManager.getInstance(project).getCachedPsiFile(event.document)?.run {
+    override fun bulkUpdateFinished(document: Document) = updateMerlin(document)
+
+    override fun afterDocumentChange(document: Document) = updateMerlin(document)
+
+    private fun updateMerlin(document: Document) {
+        PsiDocumentManager.getInstance(project).getPsiFile(document)?.run {
             merlin.tellSource(this)
         }
     }
-
-    override fun beforeDocumentChange(event: DocumentEvent) =
-        documentChanged(event)
 }

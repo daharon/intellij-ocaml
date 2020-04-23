@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>org.ocaml.ide</id>
     <name>OCaml</name>
-    <version>0.1.1</version>
+    <version>0.1.2</version>
     <vendor email="d@niel.co.il" url="https://github.com/daharon/ocaml-ide">Daniel Aharon</vendor>
     <description><![CDATA[
       <a href="https://ocaml.org/">OCaml</a> language support.<br>Also includes support for the <a href="https://dune.build/">Dune</a> build system.
@@ -26,9 +26,9 @@
         <lang.syntaxHighlighterFactory language="Ocaml"
                                        implementationClass="org.ocaml.ide.highlighter.OcamlSyntaxHighlighterFactory"/>
         <lang.parserDefinition language="Ocaml" implementationClass="org.ocaml.lang.parser.OcamlParserDefinition"/>
-        <annotator language="Ocaml" implementationClass="org.ocaml.ide.highlighter.OcamlContextualSyntaxHighlighter"/>
         <externalAnnotator language="Ocaml"
                            implementationClass="org.ocaml.ide.highlighter.MerlinErrorHighlightingAnnotator"/>
+        <annotator language="Ocaml" implementationClass="org.ocaml.ide.highlighter.OcamlContextualSyntaxHighlighter"/>
         <completion.contributor language="Ocaml"
                                 implementationClass="org.ocaml.ide.completion.OcamlCompletionContributor"/>
         <lang.commenter language="Ocaml" implementationClass="org.ocaml.ide.commenter.OcamlCommenter"/>
@@ -47,7 +47,7 @@
         <completion.contributor language="Ocaml Interface"
                                 implementationClass="org.ocaml.ide.completion.OcamlCompletionContributor"/>
         <lang.commenter language="Ocaml Interface" implementationClass="org.ocaml.ide.commenter.OcamlCommenter"/>
-        <lang.documentationProvider language="Ocaml" implementationClass="org.ocaml.ide.documentation.OcamlDocumentationProvider"/>
+        <lang.documentationProvider language="Ocaml Interface" implementationClass="org.ocaml.ide.documentation.OcamlDocumentationProvider"/>
 
         <!-- Projects -->
         <moduleType id="OcamlModuleType" implementationClass="org.ocaml.ide.project.OcamlModuleType"/>
