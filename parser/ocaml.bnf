@@ -192,6 +192,7 @@ implementation ::=
 functor_arg ::=
     LPAREN RPAREN
   | LPAREN functor_arg_name COLON module_type RPAREN
+  | LPAREN functor_arg_name COLON mod_longident RPAREN
 
 functor_arg_name ::=
     UIDENT
@@ -243,6 +244,7 @@ str_include_statement ::=
 module_binding_body ::=
     EQUAL module_expr
   | COLON module_type EQUAL module_expr
+  | COLON mod_longident EQUAL module_expr
   | functor_arg module_binding_body
 
 module_binding ::=
@@ -272,8 +274,9 @@ module_type ::=
   | FUNCTOR attributes ? functor_args MINUSGREATER module_type module_type_suffix ?
       //%prec below_WITH
   | MODULE TYPE OF attributes ? module_expr module_type_suffix ? //%prec below_LBRACKETAT
-/*  | LPAREN MODULE mod_longident RPAREN
-       */
+  /*
+  | LPAREN MODULE mod_longident RPAREN
+  */
   | LPAREN module_type RPAREN module_type_suffix ?
   | extension module_type_suffix ?
 
