@@ -18,7 +18,7 @@ plugins {
 }
 
 group = "kuruvila"
-version = "0.1.2"
+version = "0.1.3"
 
 repositories {
     mavenCentral()
@@ -27,7 +27,7 @@ repositories {
 
 intellij {
     version = property("ideaVersion").toString()
-    setPlugins("java", "coverage", "PsiViewer:193-SNAPSHOT")
+    setPlugins("java", "coverage", "PsiViewer:201-SNAPSHOT")
     pluginName = "ocaml-idea"
     updateSinceUntilBuild = false
 }

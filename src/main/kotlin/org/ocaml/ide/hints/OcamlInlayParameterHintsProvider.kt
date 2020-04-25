@@ -32,7 +32,8 @@ class OcamlInlayParameterHintsProvider : InlayParameterHintsProvider {
         private const val OPTION_LET_BINDING = "OCAML_PARAM_HINT_LET_BINDING"
     }
 
-    override fun getParameterHints(element: PsiElement?): MutableList<InlayInfo> {
+    override fun getParameterHints(element: PsiElement): MutableList<InlayInfo> {
+        val merlin by lazy { element.project.service<MerlinService>() }
         val output = mutableListOf<InlayInfo>()
         fun addInlayInfo(text: String, element: PsiElement, outputList: MutableList<InlayInfo>) {
             val info = InlayInfo(
@@ -41,29 +42,26 @@ class OcamlInlayParameterHintsProvider : InlayParameterHintsProvider {
             )
             outputList.add(info)
         }
-        if (element != null) {
-            val merlin by lazy { element.project.service<MerlinService>() }
-            when {
-                // Update Merlin when we start hinting a new file.
-                element is OcamlPsiFileRoot ->
-                    merlin.tellSource(element)
+        when {
+            // Update Merlin when we start hinting a new file.
+            element is OcamlPsiFileRoot ->
+                merlin.tellSource(element)
 
-                // Anonymous function parameters (fun ... -> ...).
-                element is LabeledSimplePattern
-                        && (element.context is NonOpExpr || element.context is FunDef)
-                        && element.firstChild.firstChild !is SimplePatternNotIdent
-                        // Do not type-hint for explicitly typed parameter.
-                        && element.children.none { it is LabelLetPattern } ->
-                    getType(merlin, element)?.let { addInlayInfo(it, element, output) }
+            // Anonymous function parameters (fun ... -> ...).
+            element is LabeledSimplePattern
+                    && (element.context is NonOpExpr || element.context is FunDef)
+                    && element.firstChild.firstChild !is SimplePatternNotIdent
+                    // Do not type-hint for explicitly typed parameter.
+                    && element.children.none { it is LabelLetPattern } ->
+                getType(merlin, element)?.let { addInlayInfo(it, element, output) }
 
-                // Type of function expression (function | ...).
-                element.elementType == OcamlTypes.FUNCTION ->
-                    getType(merlin, element)?.let { addInlayInfo(it, element, output) }
+            // Type of function expression (function | ...).
+            element.elementType == OcamlTypes.FUNCTION ->
+                getType(merlin, element)?.let { addInlayInfo(it, element, output) }
 
-                // Variable/function let-binding.
-                element is ValDecl && element.context is LetBindingBody ->
-                    getType(merlin, element)?.let { addInlayInfo(it, element, output) }
-            }
+            // Variable/function let-binding.
+            element is ValDecl && element.context is LetBindingBody ->
+                getType(merlin, element)?.let { addInlayInfo(it, element, output) }
         }
         return output
     }
@@ -98,7 +96,7 @@ class OcamlInlayParameterHintsProvider : InlayParameterHintsProvider {
         return mutableSetOf()
     }
 
-    override fun getHintInfo(element: PsiElement?): HintInfo? {
+    override fun getHintInfo(element: PsiElement): HintInfo? {
         return null
     }
 

@@ -1,14 +1,14 @@
 <idea-plugin>
     <id>org.ocaml.ide</id>
     <name>OCaml</name>
-    <version>0.1.2</version>
+    <version>0.1.3</version>
     <vendor email="d@niel.co.il" url="https://github.com/daharon/ocaml-ide">Daniel Aharon</vendor>
     <description><![CDATA[
       <a href="https://ocaml.org/">OCaml</a> language support.<br>Also includes support for the <a href="https://dune.build/">Dune</a> build system.
     ]]></description>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-    <idea-version since-build="193.2723" until-build="201.*"/>
+    <idea-version since-build="193.3210" until-build="201.*"/>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
