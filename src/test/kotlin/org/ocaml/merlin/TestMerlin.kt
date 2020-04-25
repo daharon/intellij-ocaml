@@ -50,12 +50,12 @@ class TestMerlin : BasePlatformTestCase() {
         m.tellSource(fn, src)
         val expected = Completions(
                 entries=listOf(
-                        CompletionEntry(name="List.mapi", kind=CompletionEntryKind.VALUE, desc="(int -> 'a -> 'b) -> 'a list -> 'b list", info=""),
-                        CompletionEntry(name="List.map2", kind=CompletionEntryKind.VALUE, desc="('a -> 'b -> 'c) -> 'a list -> 'b list -> 'c list", info=""),
-                        CompletionEntry(name="List.map", kind=CompletionEntryKind.VALUE, desc="('a -> 'b) -> 'a list -> 'b list", info=""),
-                        CompletionEntry(name="ListLabels.mapi", kind=CompletionEntryKind.VALUE, desc="f:(int -> 'a -> 'b) -> 'a list -> 'b list", info=""),
-                        CompletionEntry(name="ListLabels.map2", kind=CompletionEntryKind.VALUE, desc="f:('a -> 'b -> 'c) -> 'a list -> 'b list -> 'c list", info=""),
-                        CompletionEntry(name="ListLabels.map", kind=CompletionEntryKind.VALUE, desc="f:('a -> 'b) -> 'a list -> 'b list", info="")).reversed(),
+                        CompletionEntry(name="List.mapi", kind=ElementKind.VALUE, desc="(int -> 'a -> 'b) -> 'a list -> 'b list", info=""),
+                        CompletionEntry(name="List.map2", kind=ElementKind.VALUE, desc="('a -> 'b -> 'c) -> 'a list -> 'b list -> 'c list", info=""),
+                        CompletionEntry(name="List.map", kind=ElementKind.VALUE, desc="('a -> 'b) -> 'a list -> 'b list", info=""),
+                        CompletionEntry(name="ListLabels.mapi", kind=ElementKind.VALUE, desc="f:(int -> 'a -> 'b) -> 'a list -> 'b list", info=""),
+                        CompletionEntry(name="ListLabels.map2", kind=ElementKind.VALUE, desc="f:('a -> 'b -> 'c) -> 'a list -> 'b list -> 'c list", info=""),
+                        CompletionEntry(name="ListLabels.map", kind=ElementKind.VALUE, desc="f:('a -> 'b) -> 'a list -> 'b list", info="")).reversed(),
                 context=null)
         val resp = m.expandPrefix(fn, "List.ma", Position(4, 21))
         assertEquals(expected.entries.toSet(), resp.entries.toSet())

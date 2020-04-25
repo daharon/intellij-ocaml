@@ -14,7 +14,7 @@ plugins {
     id("org.jetbrains.intellij") version "0.4.16"
     id("org.jetbrains.grammarkit") version "2020.1.2"
     java
-    kotlin("jvm") version "1.3.70"
+    kotlin("jvm") version "1.3.72"
 }
 
 group = "kuruvila"

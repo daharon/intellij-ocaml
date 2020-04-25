@@ -140,6 +140,11 @@ class Merlin(private val project: Project) {
         return makeRequest(filename, request, object : TypeReference<JsonNode>() {})
     }
 
+    fun outline(filename: String): List<Outline> {
+        val request = """["outline"]"""
+        LOG.debug("Outline request:  $request")
+        return makeRequest(filename, request, object : TypeReference<List<Outline>>() {})
+    }
 
     private fun <T> makeRequest(filename: String, query: String, clazz: TypeReference<T>): T {
         val request = """{"context": ["auto", ${objectMapper.writeValueAsString(filename)}],
@@ -169,7 +174,6 @@ class Merlin(private val project: Project) {
             }
         }
     }
-
 }
 
 data class MerlinError(val start: Position?, val end: Position?, val valid: Boolean,
@@ -196,9 +200,12 @@ data class BrowseNode(val start: Position, val end: Position, val ghost: Boolean
 
 data class Completions(val entries: List<CompletionEntry>, val context: JsonNode?)
 
-data class CompletionEntry(val name: String, val kind: CompletionEntryKind, val desc: String, val info: String)
+data class CompletionEntry(val name: String, val kind: ElementKind, val desc: String, val info: String)
 
-enum class CompletionEntryKind(name: String) {
+/**
+ * The type of the node in the AST.
+ */
+enum class ElementKind(name: String) {
     VALUE("value"),
     VARIANT("variant"),
     CONSTRUCTOR("constructor"),
@@ -228,3 +235,11 @@ object LocatedAtPosition : LocateResponse
 data class LocateFailed(val msg: String) : LocateResponse
 data class LocatedInCurrentFile(val pos: Position) : LocateResponse
 data class Located(val file: String, val pos: Position): LocateResponse
+
+data class Outline(
+    val start: Position,
+    val end: Position,
+    val name: String,
+    val kind: ElementKind,
+    val children: List<Outline>
+)

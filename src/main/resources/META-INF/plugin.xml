@@ -34,6 +34,7 @@
         <lang.commenter language="Ocaml" implementationClass="org.ocaml.ide.commenter.OcamlCommenter"/>
         <lang.documentationProvider language="Ocaml" implementationClass="org.ocaml.ide.documentation.OcamlDocumentationProvider"/>
         <codeInsight.parameterNameHints language="Ocaml" implementationClass="org.ocaml.ide.hints.OcamlInlayParameterHintsProvider"/>
+        <lang.foldingBuilder language="Ocaml" implementationClass="org.ocaml.ide.folding.OcamlFoldingBuilder"/>
 
         <!-- *.mli files -->
         <fileType name="Ocaml interface file" language="Ocaml Interface"

@@ -53,4 +53,7 @@ class MerlinService(private val project: Project) : Disposable {
         file.virtualFile?.canonicalPath?.let {
             merlin.tellSource(it, file.text)
         }
+
+    fun outline(file: PsiFile): List<Outline> =
+        merlin.outline(file.virtualFile.canonicalPath!!)
 }
