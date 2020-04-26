@@ -32,4 +32,10 @@
             <option name="FONT_TYPE" value="3"/> <!-- Bold & Italic -->
         </value>
     </option>
+    <option name="OCAML_LABELED_PARAMETER">
+        <value>
+            <option name="FOREGROUND" value="AA4926"/>
+            <option name="FONT_TYPE" value="2"/> <!-- Italic -->
+        </value>
+    </option>
 </list>

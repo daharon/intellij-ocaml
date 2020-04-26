@@ -1,10 +1,8 @@
 package org.ocaml.ide.highlighter
 
-import com.intellij.ide.highlighter.JavaHighlightingColors
 import com.intellij.lexer.FlexAdapter
 import com.intellij.lexer.Lexer
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
-import com.intellij.openapi.editor.HighlighterColors
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.editor.colors.TextAttributesKey.createTextAttributesKey
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase
@@ -130,6 +128,8 @@ class OcamlSyntaxHighlighter : SyntaxHighlighterBase() {
             createTextAttributesKey("OCAML_CONSTRUCTOR")
         val NAME_TAG =
             createTextAttributesKey("OCAML_NAME_TAG")
+        val LABELED_PARAMETER =
+            createTextAttributesKey("OCAML_LABELED_PARAMETER")
 
         val IDENTIFIER_KEYS = arrayOf(IDENTIFIER)
         val KEYWORD_KEYS = arrayOf(KEYWORD)

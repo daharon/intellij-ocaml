@@ -35,7 +35,8 @@ class OcamlColorSettingsPage : ColorSettingsPage {
             AttributesDescriptor("Declared Function", OcamlSyntaxHighlighter.DECLARED_FUNCTION),
             AttributesDescriptor("Type Parameter", OcamlSyntaxHighlighter.TYPE_PARAMETER),
             AttributesDescriptor("Variant", OcamlSyntaxHighlighter.CONSTRUCTOR),
-            AttributesDescriptor("Polymorphic Variant", OcamlSyntaxHighlighter.NAME_TAG)
+            AttributesDescriptor("Polymorphic Variant", OcamlSyntaxHighlighter.NAME_TAG),
+            AttributesDescriptor("Labeled Function Parameter", OcamlSyntaxHighlighter.LABELED_PARAMETER)
         )
     }
 
