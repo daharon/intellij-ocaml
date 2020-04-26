@@ -30,7 +30,7 @@ class OcamlContextualSyntaxHighlighter : Annotator {
                 setAttr(holder, OcamlSyntaxHighlighter.TYPE_PARAMETER)
 
             // Core data types (int, float, etc.)
-            element is TypeLongident /* SimpleCoreType2 */ && element.firstChild.elementType == OcamlTypes.LIDENT ->
+            element is TypeLongident && element.firstChild.elementType == OcamlTypes.LIDENT ->
                 setAttr(holder, OcamlSyntaxHighlighter.CORE_TYPE)
 
             // Module types (List.t, Option.t, etc)

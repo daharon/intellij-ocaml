@@ -6,6 +6,7 @@ import com.intellij.codeInsight.hints.InlayParameterHintsProvider
 import com.intellij.codeInsight.hints.Option
 import com.intellij.codeInsight.hints.settings.ParameterNameHintsSettings
 import com.intellij.openapi.components.service
+import com.intellij.openapi.util.text.StringUtil
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.elementType
 
@@ -26,6 +27,8 @@ class OcamlInlayParameterHintsProvider : InlayParameterHintsProvider {
     private val paramNameHintSettings by lazy { ParameterNameHintsSettings.getInstance() }
 
     companion object {
+        private const val TYPE_HINT_MAX_LENGTH = 40 // Characters
+        private const val TYPE_HINT_SUFFIX_LENGTH = 15 // Characters
         // Option ID's.  Used to enable or disable parameter hints.
         private const val OPTION_ANONYMOUS_FUNCTION = "OCAML_PARAM_HINT_ANONYMOUS_FUNCTION"
         private const val OPTION_FUNCTION_EXPRESSION = "OCAML_PARAM_HINT_FUNCTION_EXPRESSION"
@@ -36,8 +39,9 @@ class OcamlInlayParameterHintsProvider : InlayParameterHintsProvider {
         val merlin by lazy { element.project.service<MerlinService>() }
         val output = mutableListOf<InlayInfo>()
         fun addInlayInfo(text: String, element: PsiElement, outputList: MutableList<InlayInfo>) {
+            val formattedText = StringUtil.shortenTextWithEllipsis(text, TYPE_HINT_MAX_LENGTH, TYPE_HINT_SUFFIX_LENGTH)
             val info = InlayInfo(
-                text, element.textRange.endOffset, relatesToPrecedingText = true,
+                formattedText, element.textRange.endOffset, relatesToPrecedingText = true,
                 isShowOnlyIfExistedBefore = false, isFilterByBlacklist = true
             )
             outputList.add(info)
