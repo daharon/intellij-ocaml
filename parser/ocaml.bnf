@@ -1058,7 +1058,7 @@ optional_type_variable ::=
 type_parameters ::=
     type_parameter
   | LPAREN type_parameter_list RPAREN
-//
+
 type_parameter ::=
     type_variance ? type_variable
 

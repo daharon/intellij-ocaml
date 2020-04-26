@@ -99,8 +99,7 @@ class Merlin(private val project: Project) {
      * Returns OCamldoc documentation as a [String], either for the given qualified identifier
      * or the one at the specified position.
      */
-    fun document(filename: String, position: Position, identifier: String?): String {
-//        val request = """["document", ${objectMapper.writeValueAsString(identifier)}, "at", ${objectMapper.writeValueAsString(position)}]"""
+    fun document(filename: String, position: Position): String {
         val request = """["document", null, "at", ${objectMapper.writeValueAsString(position)}]"""
         LOG.debug("Document request:  $request")
         return makeRequest(filename, request, object : TypeReference<String>() {})

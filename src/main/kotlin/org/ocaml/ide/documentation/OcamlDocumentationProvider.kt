@@ -63,7 +63,7 @@ class OcamlDocumentationProvider : AbstractDocumentationProvider() {
         val priElement = originalElement ?: element
         val merlin = priElement.project.service<MerlinService>()
         val position = Position.fromPsiElement(priElement)
-        return merlin.document(priElement.containingFile, position, priElement.text)
+        return merlin.document(priElement.containingFile, position)
     }
 
     /**
@@ -71,8 +71,6 @@ class OcamlDocumentationProvider : AbstractDocumentationProvider() {
      *
      * https://ocamlverse.github.io/content/documentation_guidelines.html#basic-documentation-syntax
      */
-    private fun formatContent(content: String?): String? = content?.let {
-        // Just replace new-lines with HTML <br>'s, for now.
-        it.replace("\n", "<br>")
-    }
+    private fun formatContent(content: String?): String? =
+        content?.replace("\n", "<br>")
 }

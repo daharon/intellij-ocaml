@@ -38,8 +38,7 @@ class OcamlFileRunConfiguration(name: String,
     }
 
     override fun getState(executor: Executor, environment: ExecutionEnvironment): RunProfileState? {
-        val ocamlScriptRunProfileState = OcamlFileRunProfileState(environment)
-        ocamlScriptRunProfileState.filename = mlFilePath
+        val ocamlScriptRunProfileState = OcamlFileRunProfileState(environment, mlFilePath)
         return ocamlScriptRunProfileState
     }
 }

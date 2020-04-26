@@ -11,14 +11,10 @@ import java.io.File
  * Created by sidharthkuruvila on 17/05/16.
  */
 
-class OcamlFileRunProfileState(environment: ExecutionEnvironment) : CommandLineState(environment) {
-    lateinit var filename: String
+class OcamlFileRunProfileState(environment: ExecutionEnvironment, private val filename: String) : CommandLineState(environment) {
 
     override fun startProcess(): ProcessHandler {
-
-        val fn = filename
-
-        val commandLine = GeneralCommandLine("bash", "-c", buildAndRunCmd(environment, fn))
+        val commandLine = GeneralCommandLine("bash", "-c", buildAndRunCmd(environment, filename))
         environment.project.basePath?.run {
             commandLine.workDirectory = File(this)
         }
@@ -26,9 +22,9 @@ class OcamlFileRunProfileState(environment: ExecutionEnvironment) : CommandLineS
     }
 
     private fun buildAndRunCmd(environment: ExecutionEnvironment, filepath: String) : String {
-        val basePath = environment.project.baseDir
+        val basePath = environment.project.basePath
 
-        val relFilename = File(filepath).toRelativeString(File(basePath.path))
+        val relFilename = File(filepath).toRelativeString(File(basePath))
 
         if(!filepath.endsWith(".ml")) {
             throw IllegalStateException("Can only run ml files")

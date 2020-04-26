@@ -39,8 +39,8 @@ class MerlinService(private val project: Project) : Disposable {
         return merlin.locate(file.virtualFile.canonicalPath!!, position)
     }
 
-    fun document(file: PsiFile, position: Position, identifier: String? = null): String {
-        return merlin.document(file.virtualFile.canonicalPath!!, position, identifier)
+    fun document(file: PsiFile, position: Position): String {
+        return merlin.document(file.virtualFile.canonicalPath!!, position)
     }
 
     fun typeEnclosing(file: PsiFile, position: Position): List<TypeDefinition> =

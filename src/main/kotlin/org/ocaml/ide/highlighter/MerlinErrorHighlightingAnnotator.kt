@@ -55,7 +55,7 @@ class MerlinErrorHighlightingAnnotator : ExternalAnnotator<MerlinInfo, Results>(
             }
             val severity = merlinErrors[error.type] ?: HighlightSeverity.ERROR
             val message = error.message
-            holder.createAnnotation(severity, range, message)
+            holder.newAnnotation(severity, message).range(range).create()
         }
     }
 }
