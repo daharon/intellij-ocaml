@@ -11,18 +11,17 @@ val generatedSourceDir = "gen"
 
 plugins {
     id("idea")
-    id("org.jetbrains.intellij") version "0.4.16"
+    id("org.jetbrains.intellij") version "0.4.18"
     id("org.jetbrains.grammarkit") version "2020.1.2"
     java
     kotlin("jvm") version "1.3.72"
 }
 
 group = "kuruvila"
-version = "0.1.3"
+version = "0.1.4"
 
 repositories {
     mavenCentral()
-    //maven { url "http://dl.bintray.com/jetbrains/intellij-plugin-service" }
 }
 
 intellij {

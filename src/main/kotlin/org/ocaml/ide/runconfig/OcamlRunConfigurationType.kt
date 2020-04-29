@@ -9,12 +9,16 @@ import com.intellij.execution.configurations.RunConfiguration
 import com.intellij.openapi.extensions.Extensions
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Key
+
 import org.ocaml.lang.OcamlIcons
+
+private const val OCAML_RUN_CONFIGURATION_TYPE_ID = "OcamlRunFileConfiguration"
 
 /**
  * Created by sidharthkuruvila on 17/05/16.
  */
-class OcamlRunConfigurationType : ConfigurationTypeBase("OcamlRunFileConfiguration",
+class OcamlRunConfigurationType : ConfigurationTypeBase(
+        OCAML_RUN_CONFIGURATION_TYPE_ID,
         "Ocaml",
         "Run configuration for ocaml files",
         OcamlIcons.CAMEL_ICON_FILE) {
@@ -22,6 +26,8 @@ class OcamlRunConfigurationType : ConfigurationTypeBase("OcamlRunFileConfigurati
         addFactory(object : ConfigurationFactory(this) {
             override fun createTemplateConfiguration(project: Project): RunConfiguration =
                     OcamlFileRunConfiguration("Ocaml File", project, getInstance())
+
+            override fun getId(): String = OCAML_RUN_CONFIGURATION_TYPE_ID
 
             /*
             override fun configureBeforeRunTaskDefaults(providerID: Key<out BeforeRunTask<BeforeRunTask<*>>>,

@@ -1,6 +1,7 @@
 package org.ocaml.ide.service
 
 import com.intellij.openapi.Disposable
+import com.intellij.openapi.application.ReadAction
 import com.intellij.openapi.editor.EditorFactory
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
@@ -23,7 +24,9 @@ class MerlinService(private val project: Project) : Disposable {
     override fun dispose() = merlin.close()
 
     fun errors(file: PsiFile): List<MerlinError> {
-        merlin.tellSource(file.virtualFile.canonicalPath!!, file.text)
+        ReadAction.run<Exception> {
+            merlin.tellSource(file.virtualFile.canonicalPath!!, file.text)
+        }
         return merlin.errors(file.virtualFile.canonicalPath!!)
     }
 
