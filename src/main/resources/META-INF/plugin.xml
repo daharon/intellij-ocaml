@@ -49,6 +49,7 @@
                                 implementationClass="org.ocaml.ide.completion.OcamlCompletionContributor"/>
         <lang.commenter language="Ocaml Interface" implementationClass="org.ocaml.ide.commenter.OcamlCommenter"/>
         <lang.documentationProvider language="Ocaml Interface" implementationClass="org.ocaml.ide.documentation.OcamlDocumentationProvider"/>
+        <lang.foldingBuilder language="Ocaml Interface" implementationClass="org.ocaml.ide.folding.OcamlInterfaceFoldingBuilder"/>
 
         <!-- Projects -->
         <moduleType id="OcamlModuleType" implementationClass="org.ocaml.ide.project.OcamlModuleType"/>
