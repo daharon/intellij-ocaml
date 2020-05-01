@@ -1103,7 +1103,8 @@ label_declarations ::=
     label_declaration (SEMI attributes ? label_declaration) * (SEMI attributes ?)?
 //
 label_declaration ::=
-    MUTABLE ? label COLON poly_type_no_attr attributes ?
+    MUTABLE ? label COLON ((type_variable +) DOT) ? poly_type_no_attr attributes ?
+  | MUTABLE ? label COLON ((type_variable +) DOT) ? core_type_no_attr attributes ?
 
 ///* Type Extensions */
 

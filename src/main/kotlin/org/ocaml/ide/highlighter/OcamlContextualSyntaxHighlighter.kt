@@ -29,7 +29,7 @@ class OcamlContextualSyntaxHighlighter : Annotator {
             // Type parameters
             element is SimpleCoreType2 && element.firstChild.elementType == OcamlTypes.QUOTE ->
                 setAttr(holder, OcamlSyntaxHighlighter.TYPE_PARAMETER, element.textRange)
-            element is OptionalTypeParameter ->
+            element is OptionalTypeParameter || element is TypeVariable ->
                 setAttr(holder, OcamlSyntaxHighlighter.TYPE_PARAMETER, element.textRange)
 
             // Core data types (int, float, etc.)
