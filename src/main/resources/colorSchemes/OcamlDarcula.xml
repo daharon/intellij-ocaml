@@ -38,4 +38,14 @@
             <option name="FONT_TYPE" value="2"/> <!-- Italic -->
         </value>
     </option>
+    <option name="OCAML_ATTRIBUTE">
+        <value>
+            <option name="FOREGROUND" value="BBB529"/>
+        </value>
+    </option>
+    <option name="OCAML_EXTENSION">
+        <value>
+            <option name="FOREGROUND" value="BBB529"/>
+        </value>
+    </option>
 </list>

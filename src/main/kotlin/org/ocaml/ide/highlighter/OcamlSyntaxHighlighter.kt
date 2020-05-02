@@ -130,6 +130,10 @@ class OcamlSyntaxHighlighter : SyntaxHighlighterBase() {
             createTextAttributesKey("OCAML_NAME_TAG")
         val LABELED_PARAMETER =
             createTextAttributesKey("OCAML_LABELED_PARAMETER")
+        val ATTRIBUTE =
+            createTextAttributesKey("OCAML_ATTRIBUTE")
+        val EXTENSION =
+            createTextAttributesKey("OCAML_EXTENSION")
 
         val IDENTIFIER_KEYS = arrayOf(IDENTIFIER)
         val KEYWORD_KEYS = arrayOf(KEYWORD)

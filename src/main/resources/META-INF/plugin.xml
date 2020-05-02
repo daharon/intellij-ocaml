@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>org.ocaml.ide</id>
     <name>OCaml</name>
-    <version>0.1.4</version>
+    <version>0.1.6</version>
     <vendor email="d@niel.co.il" url="https://github.com/daharon/intellij-ocaml">Daniel Aharon</vendor>
     <description><![CDATA[
       <a href="https://ocaml.org/">OCaml</a> language support.<br>Also includes support for the <a href="https://dune.build/">Dune</a> build system.

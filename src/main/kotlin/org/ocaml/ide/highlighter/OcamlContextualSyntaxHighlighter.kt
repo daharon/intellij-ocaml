@@ -70,6 +70,12 @@ class OcamlContextualSyntaxHighlighter : Annotator {
                 setAttr(holder, OcamlSyntaxHighlighter.LABELED_PARAMETER, textRange)
             }
 
+            // Attributes & extensions
+            element is Attribute || element is PostItemAttribute ->
+                setAttr(holder, OcamlSyntaxHighlighter.ATTRIBUTE, element.textRange)
+            element is Extension || element is ItemExtension ->
+                setAttr(holder, OcamlSyntaxHighlighter.EXTENSION, element.textRange)
+
             else -> { /* Pass */ }
         }
 }
